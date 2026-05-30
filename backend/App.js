@@ -1,13 +1,27 @@
 import express from 'express';
-
-const app = express();
-
-app.get("/",(req,res)=>{
-  res.send("hello this is backend")
-})
+import mongoose from 'mongoose';
+import {PORT,DB_NAME} from './Src/Constants'
 
 
-const PORT= 3000
-app.listen(PORT,()=>{
-  console.log("hello this is First code of node js ")
-})
+
+
+;(async ()=>{
+  try{
+    await mongoose.connect(`${process.env.db_url}`,`${DB_NAME}`)
+  } catch (error) {
+    console.log("data base fail to connect " , error )
+  }
+})();
+
+
+// const app = express();
+
+// app.get("/",(req,res)=>{
+//   res.send("hello this is backend")
+// })
+
+
+
+// app.listen(PORT,()=>{
+//   console.log("hello this is First code of node js ")
+// })
