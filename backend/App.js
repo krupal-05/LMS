@@ -1,15 +1,13 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import ConnectDB from "./Src/db/ConnectDB.js"
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import ConnectDB from "./Src/db/ConnectDB.js";
 
 dotenv.config();
 
-const app = express()
+const app = express();
 
 ConnectDB();
-
-
 
 // ;(async ()=>{
 //   try{
@@ -24,14 +22,11 @@ ConnectDB();
 //   }
 // })();
 
-
 // const app = express();
 
 // app.get("/",(req,res)=>{
 //   res.send("hello this is backend")
 // })
-
-
 
 // app.listen(PORT,()=>{
 //   console.log("hello this is First code of node js ")
