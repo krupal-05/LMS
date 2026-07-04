@@ -1,21 +1,19 @@
-import dotenv from "dotenv";
-import ConnectDB from "./Src/db/ConnectDB.js";
-import app from "./App.js"
-
-dotenv.config();
+import "dotenv/config";
+import ConnectDB from "./src/db/ConnectDB.js";
+import app from "./App.js";
 
 const PORT = process.env.PORT || 8000;
 
 ConnectDB()
-  .then(()=>{
-   app.listen(PORT || 8000,()=>{
-    console.log(`server is running on ${PORT}`)
-   }
-   )
-})
-.catch((error)=>{
-  console.log("server connection is faild " , error)
-})
+  .then(() => {
+    app.listen(PORT || 8000, () => {
+      console.log(`server is running on ${PORT}`)
+    }
+    )
+  })
+  .catch((error) => {
+    console.log("server connection is faild ", error)
+  })
 
 
 // ;(async ()=>{

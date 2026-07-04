@@ -33,15 +33,16 @@ import userRouter from "./src/routes/user.route.js"
 
 
 // router decliration 
-app.use("/api/v1/users/",userRouter)
+app.use("/api/v1/users", userRouter)
 
-
-
-
-
-
-
-
-
+// global error handling middleware
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || err.statuscode || 500;
+  return res.status(statusCode).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+    errors: err.errors || []
+  });
+});
 
 export default app;
