@@ -25,6 +25,7 @@ app.use(express.static("public"));
 
 // import routers
 import userRouter from "./src/routes/user.route.js"
+import bookRouter from "./src/routes/book.route.js"
 
 
 
@@ -34,6 +35,8 @@ import userRouter from "./src/routes/user.route.js"
 
 // router decliration 
 app.use("/api/v1/users", userRouter)
+app.use("/api/v1/books", bookRouter);
+
 
 // global error handling middleware
 app.use((err, req, res, next) => {

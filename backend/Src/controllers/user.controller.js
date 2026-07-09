@@ -3,21 +3,25 @@ import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 import { User } from "../model/User.Model.js";
 import { uploadCloud } from "../services/cloudinary.service.js";
+import ApiResponce from "../utils/ApiResponse.js";
+import jwt from "jsonwebtoken";
 
-const generateAccessAndReFreshToken = asyncHandler(async (user_id) => {
+const generateAccessAndreFreshToken = async (user_id) => {
   try {
-    const user = await User.findById(User_id);
-    const accessToken = User.generateAccessToken();
-    const refreshtoken = User.generatereFreshToken();
+    const user = await User.findById(user_id);
+    const accessToken = user.generateAccessToken();
+    console.log(accessToken)
+    const reFreshToken = user.generatereFreshToken();
+    console.log(reFreshToken)
 
-    user.refreshtoken = refreshtoken;
+    user.reFreshToken = reFreshToken;
     await user.save({ validateBeforeSave: true });
 
-    return { accessToken, refreshtoken };
+    return { accessToken, reFreshToken };
   } catch (error) {
     throw new ApiError(402, "keys are not genrated ");
   }
-});
+};
 
 const registerUser = asyncHandler(async (req, res) => {
   //get user info form frontend
@@ -59,11 +63,8 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // upload on cloudinary
   const avatar = await uploadCloud(avatarLocalPath);
-  console.log(avatar);
-
   if (!avatar) throw new ApiError(500, "failed to upload avatar ");
 
-  console.log("this model is  ready upload on DB");
 
   //upload user on db
 
@@ -80,7 +81,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   // remove password and refresh token
   const createduser = await User.findById(user._id).select(
-    "-password -refreshtoken",
+    "-password -reFreshToken",
   );
   // if user is not register on  db
   if (!createduser) throw new ApiError(500, "user is not registered on db");
@@ -97,38 +98,175 @@ const login = asyncHandler(async (req, res) => {
   // give refresh and access token
 
   const { email, password } = req.body;
-  console.log(req.body)
 
   if (!email?.trim() || !password?.trim()) throw new ApiError(400, "Enter valid Email Or Password");
 
-  const user = await User.findOne({email});
+  const user = await User.findOne({ email });
   if (!user) throw new ApiError(404, "User dose not exist");
 
   const isPasswordCorrect = await user.isPasswordCorrect(password);
-  console.log(isPasswordCorrect , " and ", password )
   if (!isPasswordCorrect) throw new ApiError(401, "Invalid user credintials");
 
-  const { accessToken, refreshtoken } = await generateAccessAndReFreshToken(user.id);
+  const { accessToken, reFreshToken } = await generateAccessAndreFreshToken(user.id);
 
-  const loggedUser = await User.findById(user.id).select("-password -refreshtoken")
-  
+
+  const loggedUser = await User.findById(user.id).select("-password -reFreshToken")
+
   const option = {
-    httpOnly:true,
+    httpOnly: true,
     secure: true
   }
 
   return res
-  .status(201)
-  .cookie("accessToken" ,accessToken,option)
-  .cookie("refreshtoken",refreshtoken,option)
-  .json(
-    new ApiResponse(
-      201,
-      { 
-        loggedUser , accessToken,refreshtoken
-      },
-      "User Loginm successfully"
-    ));
+    .status(201)
+    .cookie("accessToken", accessToken, option)
+    .cookie("reFreshToken", reFreshToken, option)
+    .json(
+      new ApiResponse(
+        201,
+        {
+          loggedUser, accessToken, reFreshToken
+        },
+        "User Login successfully"
+      ));
 });
+const logout = asyncHandler(async (req,res) => {
+  //id find 
+  //remove refresh token
 
-export { registerUser, login };
+  await User.findByIdAndUpdate(
+    req.user._id, 
+    {
+      $unset:{
+        reFreshToken : 1
+      }
+    },
+    {
+      returnDocument: "after"
+    }
+  )
+
+    const option = {
+    httpOnly: true,
+    secure: true
+  }
+
+
+  return res
+  .status(200)
+  .clearCookie("accessToken",option)
+  .clearCookie("reFreshToken",option)
+  .json(new ApiResponse(200,{},"user Logged out SuccessFully"))
+});
+const reNewAccessToken = asyncHandler(async (req,res)=>{
+    //take reFresh token fron user 
+    //velidate token 
+    //verify from DB
+    // genrate token and sent them with responce 
+
+    const incomingReFreshToken = req.cookies?.reFreshToken || req.body.reFreshToken;
+    if(!incomingReFreshToken) throw new ApiError(401,"Unauthorized Request");
+
+    try {
+          const decodedToken = jwt.verify(incomingReFreshToken , process.env.REFRESH_SECRET_TOKEN)
+                console.log(" token is decoded ");
+      
+          const user = await User.findById(decodedToken._id)
+          if(!user) throw new ApiError(401,"Unauthorized Request")
+      
+          if(decodedToken !== user.reFreshToken) throw new ApiError(401,"refresh token is used or Expired")
+          
+          const{accessToken , reFreshToken} = await generateAccessAndreFreshToken(user._id);
+        
+        
+          const option = {
+            httpOnly: true,
+            secure: true
+          }
+         
+          return res
+          .status(200)
+          .cookie("accessToken",accessToken,option)
+          .cookie("reFreshToken", reFreshToken,option )
+          .json(new ApiResponse(201,"Access token Renew Successfully "))
+      
+    } catch (error) {
+      throw new ApiError(401, error?.message || "invalid Refresh token")
+    }
+
+});
+const getCurrentUser = asyncHandler(async (req,res)=>{
+  return res
+  .status(201)
+  .json(new ApiResponse(200,req.user,"Current user fetched successfully"))
+});
+const changePassword = asyncHandler(async(req,res)=>{
+  const {oldPassword,newPassword}=req.body
+  if(!oldPassword?.trim() || !newPassword?.trim()) throw new ApiError(401,"Enter Both Password");
+
+  if(oldPassword === newPassword)throw new ApiError(400, "New password must be different from the old password")
+
+  const user = await User.findById(req.user._id);
+  if(!user) throw new ApiError(404,"unauthorized request")
+
+  const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
+  if(!isPasswordCorrect) throw new ApiError(401,"invalid oldPassword")
+       user.password = newPassword;
+      await user.save()
+return res
+.status(200)
+.json(new ApiResponse(200,{},"Password Updated SuccessFully"))
+});
+const UpdatedAccountDetails = asyncHandler(async(req,res)=>{
+    const {firstName,lastName,contact} = req.body
+    if (
+    !firstName?.trim() &&
+    !lastName?.trim() &&
+    !contact 
+  )
+    throw new ApiError(400, "All required fields must be provided");
+
+    const user = await User.findById(req.user._id);
+    if(!user) throw new ApiError(400,"Bad Request request")
+    
+    if(firstName) user.firstName = firstName
+    if(lastName) user.lastName = lastName
+    if(contact) user.contact = contact
+    await user.save()
+
+    const updatedUser = await User.findById(user._id).select("-password -reFreshToken")
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200,updatedUser,"Details updated Successfully"))
+});
+const updateAvtar = asyncHandler(async(req,res)=>{
+    const localAvtar = req.file?.path
+    if(!localAvtar) throw new ApiError(400,"image is not uploaded")
+
+    const uploadedAvatar  = await uploadCloud(localAvtar);
+    if(!uploadedAvatar ) throw new ApiError(400,"img is not uploaded on Cloudinary")
+
+    const user = await User.findById(req.user?._id)
+    if(!user) throw new ApiError(400,"Unauthorized request");
+
+    // await cloudinary.uploader.destroy(user.avatarPublicId)
+    user.avatar = uploadedAvatar ?.url
+    await user.save()
+
+    const updatedUser = await User.findById(user._id).select("-password -reFreshToken")
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200,updatedUser,"Details updated Successfully"))
+});
+export { 
+  registerUser, 
+  login ,
+  logout,
+  reNewAccessToken , 
+  getCurrentUser ,
+  changePassword ,
+  UpdatedAccountDetails,
+  updateAvtar
+};
