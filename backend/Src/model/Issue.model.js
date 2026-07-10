@@ -1,3 +1,7 @@
+
+import mongoose from "mongoose";
+import { Schema } from "mongoose";
+
 const issueSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
@@ -7,7 +11,7 @@ const issueSchema = new Schema({
   book: {
     type: Schema.Types.ObjectId,
     ref: "Book",
-    required: true
+    required:true
   },
   issueDate: {
     type: Date,
@@ -30,3 +34,5 @@ const issueSchema = new Schema({
     ref: "User"
   }
 }, { timestamps: true });
+
+export const IssueBooks = mongoose.model("issueBooks",issueSchema)

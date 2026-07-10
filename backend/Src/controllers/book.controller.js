@@ -58,12 +58,14 @@ const createBook = asyncHandler(async (req,res)=>{
     .json(new ApiResponse(201,addedBook,"book is SuccessFully added in DB"))
 })
 const getAllBooks = asyncHandler(async (req, res) => {
-  const books = await Book.find().sort({ createdAt: -1 });
 
-  return res
+  const books = await Book.find().sort({createdAt : -1});
+
+  
+    return res
     .status(200)
-    .json(new ApiResponse(200, books, "Books fetched successfully"));
-});
+    .json(new ApiResponse(200,books,"Books sent Successfully"))
+})
 const getBookById = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
@@ -78,72 +80,49 @@ const getBookById = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, book, "Book fetched successfully"));
 });
 const updateBook = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  //check all fnd  
+  //check caover  
+  // change than upload
+  const{ title,copies,author }=req.body
+  if(
+    !title?.trim() &&
+    !copies &&
+    !author?.trim() 
+  ) throw new ApiError(400,"Minimun One Field require")
+  const {id} = req.params
+  const book=await Book.findById(id)
+  if(!book) throw new ApiError(404,"Book is not found")
 
-  const {
-    title,
-    description,
-    category,
-    author,
-    copies,
-    isbn,
-  } = req.body;
-
-  const book = await Book.findById(id);
-
-  if (!book) {
-    throw new ApiError(404, "Book not found");
-  }
-
-  if (title) book.title = title;
-  if (description) book.description = description;
-  if (category) book.category = category;
-  if (author) book.author = author;
-  if (isbn) book.isbn = isbn;
-
-  if (copies) {
-    const issuedBooks = book.copies - book.availableCopies;
-
-    book.copies = copies;
-    book.availableCopies = copies - issuedBooks;
-  }
-
-  if (req.file?.path) {
-    const uploadedCover = await uploadCloud(req.file.path);
-
-    if (!uploadedCover) {
-      throw new ApiError(500, "Failed to upload cover");
+  if(req?.file?.path)
+    {
+      const coverLocalPath = req.file?.path
+      const uploadCover = await uploadCloud(coverLocalPath)
+      if(!uploadCover) throw new ApiError(400,"cover image is not uploaded")
+      book.cover = uploadCover?.url
     }
+  
+  if(title) book.title = title
+  if(copies) book.copies = copies
+  if(author) book.author = author
 
-    // Later:
-    // await cloudinary.uploader.destroy(book.coverPublicId);
-
-    book.cover = uploadedCover.url;
-  }
-
-  await book.save();
+  await book.save()
 
   return res
-    .status(200)
-    .json(new ApiResponse(200, book, "Book updated successfully"));
+  .status(200)
+  .json(new ApiResponse(200,book,"Book Updated SuccessFully"))
+
 });
 const deleteBook = asyncHandler(async (req, res) => {
-  const { id } = req.params;
 
-  const book = await Book.findById(id);
+  const {id} =req.params
+  const book = await Book.findByIdAndDelete(id)
 
-  if (!book) {
-    throw new ApiError(404, "Book not found");
-  }
-
-  // Later:
-  // await cloudinary.uploader.destroy(book.coverPublicId);
-
-  await Book.findByIdAndDelete(id);
+  if(!book) throw new ApiError(400,"Book is not deleted")
 
   return res
-    .status(200)
-    .json(new ApiResponse(200, {}, "Book deleted successfully"));
+  .status(200)
+  .json( new ApiResponse(200,{},"Book Deleted successfully"))
+
 });
 
 export {

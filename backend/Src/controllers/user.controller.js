@@ -3,7 +3,6 @@ import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 import { User } from "../model/User.Model.js";
 import { uploadCloud } from "../services/cloudinary.service.js";
-import ApiResponce from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 
 const generateAccessAndreFreshToken = async (user_id) => {
