@@ -173,7 +173,7 @@ const reNewAccessToken = asyncHandler(async (req,res)=>{
           const user = await User.findById(decodedToken._id)
           if(!user) throw new ApiError(401,"Unauthorized Request")
       
-          if(decodedToken !== user.reFreshToken) throw new ApiError(401,"refresh token is used or Expired")
+          if(incomingReFreshToken !== user.reFreshToken) throw new ApiError(401,"refresh token is used or Expired")
           
           const{accessToken , reFreshToken} = await generateAccessAndreFreshToken(user._id);
         

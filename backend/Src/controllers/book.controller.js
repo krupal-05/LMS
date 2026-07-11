@@ -60,8 +60,6 @@ const createBook = asyncHandler(async (req,res)=>{
 const getAllBooks = asyncHandler(async (req, res) => {
 
   const books = await Book.find().sort({createdAt : -1});
-
-  
     return res
     .status(200)
     .json(new ApiResponse(200,books,"Books sent Successfully"))
