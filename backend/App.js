@@ -1,9 +1,35 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
-app.use(cors());
+app.use((req, res, next) => {
+  console.log(`[REQUEST] ${req.method} ${req.url} - Origin: ${req.headers.origin}`);
+  next();
+});
+
+// CORS — allow the Vite frontend with credentials (cookies)
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+
+    const isLocal = origin.startsWith("http://localhost:") ||
+      origin.startsWith("http://127.0.0.1:") ||
+      /^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/.test(origin) ||
+      /^http:\/\/10\.\d+\.\d+\.\d+(:\d+)?$/.test(origin) ||
+      /^http:\/\/172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+(:\d+)?$/.test(origin);
+
+    if (isLocal) {
+      callback(null, true);
+    } else {
+      callback(null, false); // Do not throw an error, just block
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+}));
+
 app.use(
   express.json({
     limit: "16kb",
@@ -16,26 +42,19 @@ app.use(
   })
 );
 app.use(express.static("public"));
-
-
-
-
+app.use(cookieParser());
 
 
 
 // import routers
 import userRouter from "./src/routes/user.route.js"
 import bookRouter from "./src/routes/book.route.js"
+import notificationRouter from "./src/routes/notification.route.js"
 
-
-
-
-
-
-
-// router decliration 
+// router decliration
 app.use("/api/v1/users", userRouter)
-app.use("/api/v1/books", bookRouter);
+app.use("/api/v1/books", bookRouter)
+app.use("/api/v1/notifications", notificationRouter);
 
 
 // global error handling middleware

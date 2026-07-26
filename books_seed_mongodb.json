@@ -1,0 +1,1152 @@
+[
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1101"
+        },
+        "title": "The Great Gatsby",
+        "description": "A story of wealth, mystery, and the American Dream set in 1920s Long Island. Jay Gatsby throws lavish parties hoping to reunite with his lost love, Daisy Buchanan.",
+        "category": "fiction",
+        "author": "f. scott fitzgerald",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9780743273565",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1102"
+        },
+        "title": "To Kill a Mockingbird",
+        "description": "Set in the American South during the 1930s, this novel explores racial injustice and moral growth through the eyes of young Scout Finch and her father, the lawyer Atticus Finch.",
+        "category": "fiction",
+        "author": "harper lee",
+        "copies": 6,
+        "availableCopies": 6,
+        "isbn": "9780061935466",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1103"
+        },
+        "title": "1984",
+        "description": "A dystopian novel set in a totalitarian society ruled by Big Brother, where Winston Smith secretly rebels against the oppressive regime.",
+        "category": "science fiction",
+        "author": "george orwell",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780451524935",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1104"
+        },
+        "title": "Pride and Prejudice",
+        "description": "A classic romance following Elizabeth Bennet as she deals with issues of manners, upbringing, morality, and love in Georgian England.",
+        "category": "romance",
+        "author": "jane austen",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9780141040349",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1105"
+        },
+        "title": "The Catcher in the Rye",
+        "description": "Narrated by teenage Holden Caulfield, this novel follows his crisis in New York City after being expelled from prep school and his struggle with identity.",
+        "category": "fiction",
+        "author": "j.d. salinger",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780316769174",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1106"
+        },
+        "title": "Harry Potter and the Sorcerer's Stone",
+        "description": "An orphaned boy discovers he is a wizard and is invited to study at Hogwarts School of Witchcraft and Wizardry. His adventure begins as he faces dark forces.",
+        "category": "fantasy",
+        "author": "j.k. rowling",
+        "copies": 8,
+        "availableCopies": 8,
+        "isbn": "9780439708180",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1107"
+        },
+        "title": "The Hobbit",
+        "description": "Bilbo Baggins, a homebody hobbit, is swept into an epic quest to reclaim the dwarves' mountain kingdom from the dragon Smaug, guided by the wizard Gandalf.",
+        "category": "fantasy",
+        "author": "j.r.r. tolkien",
+        "copies": 6,
+        "availableCopies": 6,
+        "isbn": "9780547928227",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1108"
+        },
+        "title": "The Lord of the Rings",
+        "description": "Frodo Baggins and his fellowship embark on an epic quest to destroy the One Ring and defeat the Dark Lord Sauron across Middle-earth.",
+        "category": "fantasy",
+        "author": "j.r.r. tolkien",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9780544003415",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1109"
+        },
+        "title": "Brave New World",
+        "description": "A dystopian novel set in a futuristic World State where citizens are engineered into caste-based groups and conditioned for social stability.",
+        "category": "science fiction",
+        "author": "aldous huxley",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780060850524",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1110"
+        },
+        "title": "The Da Vinci Code",
+        "description": "Harvard professor Robert Langdon investigates a murder in the Louvre, uncovering a religious conspiracy that could shake the foundations of Christianity.",
+        "category": "thriller",
+        "author": "dan brown",
+        "copies": 7,
+        "availableCopies": 7,
+        "isbn": "9780307474278",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1111"
+        },
+        "title": "A Brief History of Time",
+        "description": "Stephen Hawking explores the nature of the universe, from the Big Bang to black holes, making complex scientific concepts accessible to a general audience.",
+        "category": "science",
+        "author": "stephen hawking",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780553380163",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1112"
+        },
+        "title": "Sapiens: A Brief History of Humankind",
+        "description": "A sweeping narrative of humanity's creation and evolution, exploring the cognitive, agricultural, and scientific revolutions that shaped our world.",
+        "category": "history",
+        "author": "yuval noah harari",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9780062316097",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1113"
+        },
+        "title": "Atomic Habits",
+        "description": "An easy and proven way to build good habits and break bad ones. Tiny changes can lead to remarkable results over time.",
+        "category": "self-help",
+        "author": "james clear",
+        "copies": 6,
+        "availableCopies": 6,
+        "isbn": "9780735211292",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1114"
+        },
+        "title": "The Alchemist",
+        "description": "A philosophical novel about a young Andalusian shepherd named Santiago who dreams of finding worldly treasure and embarks on a journey of self-discovery.",
+        "category": "fiction",
+        "author": "paulo coelho",
+        "copies": 7,
+        "availableCopies": 7,
+        "isbn": "9780062315007",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1115"
+        },
+        "title": "Think and Grow Rich",
+        "description": "Desire, faith, persistence, and organized planning can lead to financial and personal success. A classic self-help guide based on studying 500 successful people.",
+        "category": "self-help",
+        "author": "napoleon hill",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9781585424337",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1116"
+        },
+        "title": "The Art of War",
+        "description": "An ancient Chinese military treatise attributed to Sun Tzu, offering strategic principles applicable in business, sports, and everyday life.",
+        "category": "philosophy",
+        "author": "sun tzu",
+        "copies": 6,
+        "availableCopies": 6,
+        "isbn": "9781599869773",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1117"
+        },
+        "title": "Rich Dad Poor Dad",
+        "description": "Robert Kiyosaki contrasts the financial philosophies of his educated but financially struggling father and his friend's uneducated but wealthy father.",
+        "category": "finance",
+        "author": "robert t. kiyosaki",
+        "copies": 6,
+        "availableCopies": 6,
+        "isbn": "9781612680194",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1118"
+        },
+        "title": "The 7 Habits of Highly Effective People",
+        "description": "Stephen Covey presents an approach to being effective in achieving personal and interpersonal goals through a series of seven key habits.",
+        "category": "self-help",
+        "author": "stephen r. covey",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9781982137274",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1119"
+        },
+        "title": "Dune",
+        "description": "Young Paul Atreides and his family accept control of the desert planet Arrakis, the only source of the universe's most valuable substance — the spice melange.",
+        "category": "science fiction",
+        "author": "frank herbert",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780441013593",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1120"
+        },
+        "title": "The Hitchhiker's Guide to the Galaxy",
+        "description": "Moments before Earth is demolished to make way for a hyperspace express route, Arthur Dent is swept into an intergalactic adventure.",
+        "category": "science fiction",
+        "author": "douglas adams",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780345391803",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1121"
+        },
+        "title": "Crime and Punishment",
+        "description": "Raskolnikov, a poverty-stricken student, commits a murder and grapples with his guilt and the moral consequences in 19th century St. Petersburg.",
+        "category": "fiction",
+        "author": "fyodor dostoevsky",
+        "copies": 3,
+        "availableCopies": 3,
+        "isbn": "9780140449136",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1122"
+        },
+        "title": "The Lean Startup",
+        "description": "Eric Ries presents a scientific approach to launching and managing startups by validated learning, rapid experimentation, and iterative product releases.",
+        "category": "business",
+        "author": "eric ries",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780307887894",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1123"
+        },
+        "title": "Zero to One",
+        "description": "Peter Thiel shares insights on building companies that create new things, emphasizing that the next breakthrough will come from technology, not globalization.",
+        "category": "business",
+        "author": "peter thiel",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780804139021",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1124"
+        },
+        "title": "Introduction to Algorithms",
+        "description": "A comprehensive and rigorous treatment of a broad range of algorithms used in computer science and software engineering.",
+        "category": "computer science",
+        "author": "thomas h. cormen",
+        "copies": 3,
+        "availableCopies": 3,
+        "isbn": "9780262033848",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1125"
+        },
+        "title": "Clean Code",
+        "description": "Robert C. Martin presents programming best practices for writing clean, readable, and maintainable code through examples and refactoring techniques.",
+        "category": "computer science",
+        "author": "robert c. martin",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780132350884",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1126"
+        },
+        "title": "Design Patterns",
+        "description": "The Gang of Four presents 23 classic software design patterns that solve common problems in object-oriented software design.",
+        "category": "computer science",
+        "author": "erich gamma",
+        "copies": 3,
+        "availableCopies": 3,
+        "isbn": "9780201633610",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1127"
+        },
+        "title": "The Pragmatic Programmer",
+        "description": "A guide for software developers to think about their craft with pragmatism, covering topics from personal responsibility to architectural techniques.",
+        "category": "computer science",
+        "author": "andrew hunt",
+        "copies": 3,
+        "availableCopies": 3,
+        "isbn": "9780135957059",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1128"
+        },
+        "title": "You Don't Know JS",
+        "description": "A deep dive into the core mechanisms of the JavaScript language, helping developers truly understand how JavaScript works under the hood.",
+        "category": "computer science",
+        "author": "kyle simpson",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9781491924464",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1129"
+        },
+        "title": "The Subtle Art of Not Giving a Fck",
+        "description": "A counterintuitive approach to living a good life by embracing limitations and focusing on what truly matters, rather than pursuing positivity at all costs.",
+        "category": "self-help",
+        "author": "mark manson",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9780062457714",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1130"
+        },
+        "title": "Man's Search for Meaning",
+        "description": "Viktor Frankl recounts his experiences as a Holocaust survivor and presents logotherapy — a psychotherapeutic method for finding purpose in life.",
+        "category": "psychology",
+        "author": "viktor e. frankl",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780807014271",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1131"
+        },
+        "title": "Thinking, Fast and Slow",
+        "description": "Daniel Kahneman explores the two systems that drive the way we think — fast intuitive thinking and slow deliberate thinking — and how they shape our judgments.",
+        "category": "psychology",
+        "author": "daniel kahneman",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780374533557",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1132"
+        },
+        "title": "The Power of Habit",
+        "description": "Charles Duhigg explains why habits exist and how they can be changed, with insights into why some people and companies struggle to change while others do so easily.",
+        "category": "psychology",
+        "author": "charles duhigg",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9780812981605",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1133"
+        },
+        "title": "Influence: The Psychology of Persuasion",
+        "description": "Robert Cialdini examines the six principles of influence — reciprocity, commitment, social proof, authority, liking, and scarcity — and their applications.",
+        "category": "psychology",
+        "author": "robert b. cialdini",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780062937650",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1134"
+        },
+        "title": "The Diary of a Young Girl",
+        "description": "Anne Frank's diary chronicles her life in hiding with her family in Amsterdam during the Nazi occupation, offering a powerful first-hand account of the Holocaust.",
+        "category": "biography",
+        "author": "anne frank",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9780553296983",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1135"
+        },
+        "title": "Long Walk to Freedom",
+        "description": "Nelson Mandela's autobiography documents his early life, education, and 27 years in prison before becoming South Africa's first democratically elected president.",
+        "category": "biography",
+        "author": "nelson mandela",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780316548182",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1136"
+        },
+        "title": "Steve Jobs",
+        "description": "Walter Isaacson's biography of Apple co-founder Steve Jobs, based on interviews with Jobs, family, friends, and rivals — a riveting story of creativity and drive.",
+        "category": "biography",
+        "author": "walter isaacson",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9781451648539",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1137"
+        },
+        "title": "The Innovators",
+        "description": "Walter Isaacson traces the history of the digital revolution through the visionaries, hackers, inventors, and entrepreneurs who created the computer and the internet.",
+        "category": "history",
+        "author": "walter isaacson",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9781476708706",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1138"
+        },
+        "title": "Educated",
+        "description": "Tara Westover's memoir about growing up in a survivalist family in rural Idaho and her journey to Cambridge and Harvard despite never having attended school.",
+        "category": "biography",
+        "author": "tara westover",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9780399590504",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1139"
+        },
+        "title": "Becoming",
+        "description": "Michelle Obama's intimate memoir about growing up on Chicago's South Side, her years in the White House, and her ongoing commitment to civic engagement.",
+        "category": "biography",
+        "author": "michelle obama",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9781524763138",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1140"
+        },
+        "title": "The Monk Who Sold His Ferrari",
+        "description": "A fable about a successful lawyer who abandons his career after a heart attack to find fulfillment through spiritual wisdom in the Himalayas.",
+        "category": "self-help",
+        "author": "robin sharma",
+        "copies": 6,
+        "availableCopies": 6,
+        "isbn": "9780062515926",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1141"
+        },
+        "title": "Deep Work",
+        "description": "Cal Newport argues that the ability to focus without distraction on cognitively demanding tasks is the superpower of the 21st century.",
+        "category": "self-help",
+        "author": "cal newport",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9781455586691",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1142"
+        },
+        "title": "The Psychology of Money",
+        "description": "Morgan Housel explores the strange ways people think about money and teaches how to make better sense of one of life's most important topics.",
+        "category": "finance",
+        "author": "morgan housel",
+        "copies": 6,
+        "availableCopies": 6,
+        "isbn": "9780857197689",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1143"
+        },
+        "title": "The Intelligent Investor",
+        "description": "Benjamin Graham's classic guide to value investing, teaching investors how to develop long-term strategies, manage risk, and deal with market fluctuations.",
+        "category": "finance",
+        "author": "benjamin graham",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780060555665",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1144"
+        },
+        "title": "Animal Farm",
+        "description": "George Orwell's allegorical novella in which farm animals overthrow their human farmer, only to fall into an even more oppressive regime under the pigs' control.",
+        "category": "fiction",
+        "author": "george orwell",
+        "copies": 5,
+        "availableCopies": 5,
+        "isbn": "9780451526342",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1145"
+        },
+        "title": "Frankenstein",
+        "description": "Mary Shelley's gothic novel about scientist Victor Frankenstein who creates a sentient creature and grapples with the moral consequences of playing god.",
+        "category": "horror",
+        "author": "mary shelley",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780486282114",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1146"
+        },
+        "title": "The Art of Thinking Clearly",
+        "description": "Rolf Dobelli describes 99 cognitive biases and logical errors that distort our thinking and how we can avoid them in daily decision-making.",
+        "category": "psychology",
+        "author": "rolf dobelli",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780062219695",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1147"
+        },
+        "title": "Grit: The Power of Passion and Perseverance",
+        "description": "Angela Duckworth argues that the secret to outstanding achievement is not talent but a special blend of passion and persistence she calls grit.",
+        "category": "self-help",
+        "author": "angela duckworth",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9781501111105",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1148"
+        },
+        "title": "The Lean Six Sigma Pocket Toolbook",
+        "description": "A quick reference guide for improving quality and efficiency using Lean and Six Sigma methods, tools, and implementation strategies.",
+        "category": "business",
+        "author": "michael l. george",
+        "copies": 3,
+        "availableCopies": 3,
+        "isbn": "9780071441643",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1149"
+        },
+        "title": "Operating System Concepts",
+        "description": "A foundational textbook covering process management, memory management, file systems, and security in modern operating systems, used widely in CS courses.",
+        "category": "computer science",
+        "author": "abraham silberschatz",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9781119800361",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    },
+    {
+        "_id": {
+            "$oid": "6a5b47f9de3330e173ca1150"
+        },
+        "title": "Database System Concepts",
+        "description": "A comprehensive textbook on relational databases, SQL, normalization, transaction management, and advanced database topics for students and professionals.",
+        "category": "computer science",
+        "author": "abraham silberschatz",
+        "copies": 4,
+        "availableCopies": 4,
+        "isbn": "9780078022159",
+        "cover": {
+            "url": "",
+            "public_id": ""
+        },
+        "createdAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "updatedAt": {
+            "$date": "2025-01-01T00:00:00.000Z"
+        },
+        "__v": 0
+    }
+]

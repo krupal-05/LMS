@@ -113,7 +113,8 @@ const login = asyncHandler(async (req, res) => {
 
   const option = {
     httpOnly: true,
-    secure: true
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
   }
 
   return res
@@ -129,15 +130,15 @@ const login = asyncHandler(async (req, res) => {
         "User Login successfully"
       ));
 });
-const logout = asyncHandler(async (req,res) => {
+const logout = asyncHandler(async (req, res) => {
   //id find 
   //remove refresh token
 
   await User.findByIdAndUpdate(
-    req.user._id, 
+    req.user._id,
     {
-      $unset:{
-        reFreshToken : 1
+      $unset: {
+        reFreshToken: 1
       }
     },
     {
@@ -145,127 +146,129 @@ const logout = asyncHandler(async (req,res) => {
     }
   )
 
-    const option = {
+  const option = {
     httpOnly: true,
-    secure: true
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
   }
 
 
   return res
-  .status(200)
-  .clearCookie("accessToken",option)
-  .clearCookie("reFreshToken",option)
-  .json(new ApiResponse(200,{},"user Logged out SuccessFully"))
+    .status(200)
+    .clearCookie("accessToken", option)
+    .clearCookie("reFreshToken", option)
+    .json(new ApiResponse(200, {}, "user Logged out SuccessFully"))
 });
-const reNewAccessToken = asyncHandler(async (req,res)=>{
-    //take reFresh token fron user 
-    //velidate token 
-    //verify from DB
-    // genrate token and sent them with responce 
+const reNewAccessToken = asyncHandler(async (req, res) => {
+  //take reFresh token fron user 
+  //velidate token 
+  //verify from DB
+  // genrate token and sent them with responce 
 
-    const incomingReFreshToken = req.cookies?.reFreshToken || req.body.reFreshToken;
-    if(!incomingReFreshToken) throw new ApiError(401,"Unauthorized Request");
+  const incomingReFreshToken = req.cookies?.reFreshToken || req.body.reFreshToken;
+  if (!incomingReFreshToken) throw new ApiError(401, "Unauthorized Request");
 
-    try {
-          const decodedToken = jwt.verify(incomingReFreshToken , process.env.REFRESH_SECRET_TOKEN)
-                console.log(" token is decoded ");
-      
-          const user = await User.findById(decodedToken._id)
-          if(!user) throw new ApiError(401,"Unauthorized Request")
-      
-          if(incomingReFreshToken !== user.reFreshToken) throw new ApiError(401,"refresh token is used or Expired")
-          
-          const{accessToken , reFreshToken} = await generateAccessAndreFreshToken(user._id);
-        
-        
-          const option = {
-            httpOnly: true,
-            secure: true
-          }
-         
-          return res
-          .status(200)
-          .cookie("accessToken",accessToken,option)
-          .cookie("reFreshToken", reFreshToken,option )
-          .json(new ApiResponse(201,"Access token Renew Successfully "))
-      
-    } catch (error) {
-      throw new ApiError(401, error?.message || "invalid Refresh token")
+  try {
+    const decodedToken = jwt.verify(incomingReFreshToken, process.env.REFRESH_SECRET_TOKEN)
+    console.log(" token is decoded ");
+
+    const user = await User.findById(decodedToken._id)
+    if (!user) throw new ApiError(401, "Unauthorized Request")
+
+    if (incomingReFreshToken !== user.reFreshToken) throw new ApiError(401, "refresh token is used or Expired")
+
+    const { accessToken, reFreshToken } = await generateAccessAndreFreshToken(user._id);
+
+
+    const option = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
     }
 
-});
-const getCurrentUser = asyncHandler(async (req,res)=>{
-  return res
-  .status(201)
-  .json(new ApiResponse(200,req.user,"Current user fetched successfully"))
-});
-const changePassword = asyncHandler(async(req,res)=>{
-  const {oldPassword,newPassword}=req.body
-  if(!oldPassword?.trim() || !newPassword?.trim()) throw new ApiError(401,"Enter Both Password");
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, option)
+      .cookie("reFreshToken", reFreshToken, option)
+      .json(new ApiResponse(201, "Access token Renew Successfully "))
 
-  if(oldPassword === newPassword)throw new ApiError(400, "New password must be different from the old password")
+  } catch (error) {
+    throw new ApiError(401, error?.message || "invalid Refresh token")
+  }
+
+});
+const getCurrentUser = asyncHandler(async (req, res) => {
+  return res
+    .status(201)
+    .json(new ApiResponse(200, req.user, "Current user fetched successfully"))
+});
+const changePassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword } = req.body
+  if (!oldPassword?.trim() || !newPassword?.trim()) throw new ApiError(401, "Enter Both Password");
+
+  if (oldPassword === newPassword) throw new ApiError(400, "New password must be different from the old password")
 
   const user = await User.findById(req.user._id);
-  if(!user) throw new ApiError(404,"unauthorized request")
+  if (!user) throw new ApiError(404, "unauthorized request")
 
   const isPasswordCorrect = await user.isPasswordCorrect(oldPassword)
-  if(!isPasswordCorrect) throw new ApiError(401,"invalid oldPassword")
-       user.password = newPassword;
-      await user.save()
-return res
-.status(200)
-.json(new ApiResponse(200,{},"Password Updated SuccessFully"))
+  if (!isPasswordCorrect) throw new ApiError(401, "invalid oldPassword")
+  user.password = newPassword;
+  await user.save()
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password Updated SuccessFully"))
 });
-const UpdatedAccountDetails = asyncHandler(async(req,res)=>{
-    const {firstName,lastName,contact} = req.body
-    if (
+const UpdatedAccountDetails = asyncHandler(async (req, res) => {
+  const { firstName, lastName, contact } = req.body
+  if (
     !firstName?.trim() &&
     !lastName?.trim() &&
-    !contact 
+    !contact
   )
     throw new ApiError(400, "All required fields must be provided");
 
-    const user = await User.findById(req.user._id);
-    if(!user) throw new ApiError(400,"Bad Request request")
-    
-    if(firstName) user.firstName = firstName
-    if(lastName) user.lastName = lastName
-    if(contact) user.contact = contact
-    await user.save()
+  const user = await User.findById(req.user._id);
+  if (!user) throw new ApiError(400, "Bad Request request")
 
-    const updatedUser = await User.findById(user._id).select("-password -reFreshToken")
+  if (firstName) user.firstName = firstName
+  if (lastName) user.lastName = lastName
+  if (contact) user.contact = contact
+  await user.save()
 
-    return res
+  const updatedUser = await User.findById(user._id).select("-password -reFreshToken")
+
+  return res
     .status(200)
-    .json(new ApiResponse(200,updatedUser,"Details updated Successfully"))
+    .json(new ApiResponse(200, updatedUser, "Details updated Successfully"))
 });
-const updateAvtar = asyncHandler(async(req,res)=>{
-    const localAvtar = req.file?.path
-    if(!localAvtar) throw new ApiError(400,"image is not uploaded")
+const updateAvtar = asyncHandler(async (req, res) => {
+  const localAvtar = req.file?.path
+  if (!localAvtar) throw new ApiError(400, "image is not uploaded")
 
-    const uploadedAvatar  = await uploadCloud(localAvtar);
-    if(!uploadedAvatar ) throw new ApiError(400,"img is not uploaded on Cloudinary")
+  const uploadedAvatar = await uploadCloud(localAvtar);
+  if (!uploadedAvatar) throw new ApiError(400, "img is not uploaded on Cloudinary")
 
-    const user = await User.findById(req.user?._id)
-    if(!user) throw new ApiError(400,"Unauthorized request");
+  const user = await User.findById(req.user?._id)
+  if (!user) throw new ApiError(400, "Unauthorized request");
 
-    // await cloudinary.uploader.destroy(user.avatarPublicId)
-    user.avatar = uploadedAvatar ?.url
-    await user.save()
+  // await cloudinary.uploader.destroy(user.avatarPublicId)
+  user.avatar = uploadedAvatar?.url
+  await user.save()
 
-    const updatedUser = await User.findById(user._id).select("-password -reFreshToken")
+  const updatedUser = await User.findById(user._id).select("-password -reFreshToken")
 
-    return res
+  return res
     .status(200)
-    .json(new ApiResponse(200,updatedUser,"Details updated Successfully"))
+    .json(new ApiResponse(200, updatedUser, "Details updated Successfully"))
 });
-export { 
-  registerUser, 
-  login ,
+export {
+  registerUser,
+  login,
   logout,
-  reNewAccessToken , 
-  getCurrentUser ,
-  changePassword ,
+  reNewAccessToken,
+  getCurrentUser,
+  changePassword,
   UpdatedAccountDetails,
   updateAvtar
 };

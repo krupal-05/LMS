@@ -11,15 +11,14 @@ const issueSchema = new Schema({
   book: {
     type: Schema.Types.ObjectId,
     ref: "Book",
-    required:true
+    required: true
   },
   issueDate: {
     type: Date,
     default: Date.now
   },
   dueDate: {
-    type: Date,
-    required: true
+    type: Date
   },
   returnDate: {
     type: Date
@@ -32,7 +31,16 @@ const issueSchema = new Schema({
   approvedBy: {
     type: Schema.Types.ObjectId,
     ref: "User"
+  },
+  fineAmount: {
+    type: Number,
+    default: 0
+  },
+  fineStatus: {
+    type: String,
+    enum: ["unpaid", "paid", "waived"],
+    default: "unpaid"
   }
 }, { timestamps: true });
 
-export const IssueBooks = mongoose.model("issueBooks",issueSchema)
+export const IssueBooks = mongoose.model("issueBooks", issueSchema)
