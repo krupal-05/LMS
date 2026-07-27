@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/layout/Navbar';
 import { useAuth } from '../context/AuthContext';
-import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi';
-import { HiOutlineBookOpen } from 'react-icons/hi';
+import { FiMail, FiLock, FiEye, FiEyeOff, FiBookOpen, FiArrowRight, FiShield, FiUserCheck } from 'react-icons/fi';
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const { loginAction, loading } = useAuth();
@@ -37,132 +37,138 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-amber-50">
+    <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col justify-between">
       <Navbar />
-      <div className="flex items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md">
 
-          {/* Header */}
+      <main className="flex-1 flex items-center justify-center px-4 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="w-full max-w-md"
+        >
+          {/* Header Branding */}
           <div className="text-center mb-8">
-            <div className="inline-flex h-16 w-16 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-500 items-center justify-center shadow-lg mb-4">
-              <HiOutlineBookOpen className="text-white text-3xl" />
+            <div className="inline-flex h-14 w-14 rounded-2xl bg-gradient-accent p-0.5 shadow-xl shadow-cyan-500/20 mb-3">
+              <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
+                <FiBookOpen className="text-cyan-400 text-2xl" />
+              </div>
             </div>
-            <h1 className="text-3xl font-bold text-gray-800">Welcome Back!</h1>
-            <p className="text-gray-500 mt-1">Sign in to your Library LMS account</p>
+            <h1 className="text-2xl font-extrabold text-slate-100 tracking-tight">Sign In to LMS Workspace</h1>
+            <p className="text-xs text-slate-400 mt-1">Access your personalized library dashboard</p>
           </div>
 
-          {/* Card */}
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-
-            {/* Sliding Role Toggler */}
-            <div className="flex bg-gray-100 p-1.5 rounded-xl mb-6 relative border border-gray-200">
+          {/* Glass Login Box */}
+          <div className="glass-panel rounded-2xl p-6 sm:p-8 shadow-2xl border border-slate-800">
+            {/* Segmented Role Switcher */}
+            <div className="grid grid-cols-2 bg-slate-950 p-1 rounded-xl mb-6 border border-slate-800">
               <button
                 type="button"
                 onClick={() => setRole('student')}
-                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${role === 'student'
-                    ? 'bg-sky-500 text-white shadow-md'
-                    : 'text-gray-500 hover:text-gray-800'
-                  }`}
+                className={`py-2 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  role === 'student'
+                    ? 'bg-gradient-accent text-white shadow-md shadow-cyan-500/20'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
               >
-                Student Login
+                <FiUserCheck className="w-3.5 h-3.5" /> Student Login
               </button>
+
               <button
                 type="button"
                 onClick={() => setRole('admin')}
-                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${role === 'admin'
-                    ? 'bg-sky-500 text-white shadow-md'
-                    : 'text-gray-500 hover:text-gray-800'
-                  }`}
+                className={`py-2 text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                  role === 'admin'
+                    ? 'bg-gradient-accent text-white shadow-md shadow-cyan-500/20'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
               >
-                Admin Login
+                <FiShield className="w-3.5 h-3.5" /> Admin Login
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-
-              {/* Email */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Email Input */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Email Address
-                </label>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">Email Address</label>
                 <div className="relative">
-                  <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     type="email"
                     name="email"
                     id="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="you@example.com"
-                    className={`w-full pl-10 pr-4 py-3 rounded-xl border text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 transition text-sm ${errors.email
-                      ? 'border-red-400 focus:ring-red-200 bg-red-50'
-                      : 'border-gray-200 focus:ring-sky-200 focus:border-sky-400 bg-gray-50'
-                      }`}
+                    placeholder="student@institution.edu"
+                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl border text-slate-100 placeholder-slate-500 text-xs focus:outline-none transition-all ${
+                      errors.email
+                        ? 'border-rose-500/50 bg-rose-500/10 focus:ring-1 focus:ring-rose-500'
+                        : 'border-slate-800 bg-slate-900/60 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30'
+                    }`}
                   />
                 </div>
-                {errors.email && <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">⚠ {errors.email}</p>}
+                {errors.email && <p className="text-rose-400 text-[11px] mt-1">⚠ {errors.email}</p>}
               </div>
 
-              {/* Password */}
+              {/* Password Input */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                  Password
-                </label>
+                <label className="block text-xs font-medium text-slate-300 mb-1.5">Password</label>
                 <div className="relative">
-                  <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     name="password"
                     id="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="Your password"
-                    className={`w-full pl-10 pr-11 py-3 rounded-xl border text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 transition text-sm ${errors.password
-                      ? 'border-red-400 focus:ring-red-200 bg-red-50'
-                      : 'border-gray-200 focus:ring-sky-200 focus:border-sky-400 bg-gray-50'
-                      }`}
+                    placeholder="••••••••••••"
+                    className={`w-full pl-10 pr-10 py-2.5 rounded-xl border text-slate-100 placeholder-slate-500 text-xs focus:outline-none transition-all ${
+                      errors.password
+                        ? 'border-rose-500/50 bg-rose-500/10 focus:ring-1 focus:ring-rose-500'
+                        : 'border-slate-800 bg-slate-900/60 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/30'
+                    }`}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
                   >
-                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                    {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                   </button>
                 </div>
-                {errors.password && <p className="text-red-500 text-xs mt-1.5 flex items-center gap-1">⚠ {errors.password}</p>}
+                {errors.password && <p className="text-rose-400 text-[11px] mt-1">⚠ {errors.password}</p>}
               </div>
 
-              {/* Submit */}
+              {/* Submit Button */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold text-base shadow-md hover:from-sky-600 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-sky-200 transition disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
+                className="w-full py-3 rounded-xl bg-gradient-accent text-white font-semibold text-xs tracking-wide hover:opacity-95 transition-all shadow-lg shadow-cyan-500/20 active:scale-[0.99] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer mt-2"
               >
                 {loading ? (
                   <>
-                    <svg className="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                    </svg>
-                    Signing In...
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Authenticating...
                   </>
-                ) : 'Sign In'}
+                ) : (
+                  <>
+                    Sign In to Workspace <FiArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
             </form>
 
-            <p className="text-center text-sm text-gray-500 mt-6">
-              Don't have an account?{' '}
-              <Link to="/register" className="font-semibold text-sky-500 hover:text-sky-700 transition">
-                Create one free →
+            <div className="mt-6 pt-4 border-t border-slate-800 text-center text-xs text-slate-400">
+              New student or faculty member?{' '}
+              <Link to="/register" className="font-semibold text-cyan-400 hover:text-cyan-300 transition-colors">
+                Create account →
               </Link>
-            </p>
+            </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </main>
     </div>
   );
 };
 
 export default Login;
-

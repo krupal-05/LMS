@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { FiMenu, FiX, FiLogOut, FiUser, FiBell, FiBookOpen, FiGrid, FiShield, FiSun, FiMoon } from 'react-icons/fi';
-import api from '../services/api';
+import api from '../../services/api';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
@@ -57,12 +57,12 @@ const Navbar = () => {
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-accent p-0.5 shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
               <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <img  src='/logo.png' className="w-10 h-10 text-cyan-400" />
+                <img src="/logo.png" alt="Logo" className="w-10 h-10 text-cyan-400" />
               </div>
             </div>
             <div className="flex flex-col">
               <span className="text-base font-extrabold tracking-tight text-slate-100 group-hover:text-cyan-400 transition-colors">
-                <span className="text-gradient">Library</span> Management Syatem
+                <span className="text-gradient">Library</span> Management System
               </span>
               <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Library Suite</span>
             </div>
@@ -71,11 +71,11 @@ const Navbar = () => {
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-2 bg-slate-900/60 border border-slate-800/80 p-1 rounded-2xl">
             <NavLink to="/" className={navLinkClass} end>
-              <FiBookOpen className="w-4 h-4" />  Home
+              <FiBookOpen className="w-4 h-4" /> Home
             </NavLink>
             {user && (
               <NavLink to={dashboardPath} className={navLinkClass}>
-                <FiGrid className="w-4 h-4" />  Dashboard
+                <FiGrid className="w-4 h-4" /> Dashboard
               </NavLink>
             )}
           </nav>

@@ -4,8 +4,9 @@ import {
   getAllBooks,
   getBookById,
   updateBook,
-  deleteBook
-} from "../controllers/book.controller.js"
+  deleteBook,
+  getLibraryStats
+} from "../controllers/book.controller.js";
 import {
   requestBook,
   approveIssue,
@@ -15,12 +16,15 @@ import {
   waiveFine,
   getMyIssuedBooks,
   getAllIssuedBooks
-} from "../controllers/issebook.controller.js"
+} from "../controllers/issebook.controller.js";
 import { verifyeJWT } from "../middlewares/auth.middleware.js";
 import { verifyAdmin } from "../middlewares/admin.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
+
+// Public Stats
+router.route("/stats").get(getLibraryStats);
 
 // Book CRUD
 router.route("/add-book").post(verifyeJWT, verifyAdmin, upload.single("cover"), createBook);

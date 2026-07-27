@@ -188,12 +188,11 @@ const waiveFine = asyncHandler(async (req, res) => {
 });
 
 const getMyIssuedBooks = asyncHandler(async (req, res) => {
-  const books = await IssueBooks.find({ user: req?.user?._id }).populate("book");
-  if (books.length === 0) throw new ApiError(404, "your Issue request not found");
+  const books = await IssueBooks.find({ user: req?.user?._id }).populate("book").sort({ createdAt: -1 });
 
   return res
     .status(200)
-    .json(new ApiResponse(200, books, "My issued books fetched successfully. "))
+    .json(new ApiResponse(200, books || [], "My issued books fetched successfully."))
 });
 
 const getAllIssuedBooks = asyncHandler(async (req, res) => {
