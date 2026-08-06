@@ -47,13 +47,11 @@ app.use(cookieParser());
 // import routers
 import userRouter from "./src/routes/user.route.js";
 import bookRouter from "./src/routes/book.route.js";
-import notificationRouter from "./src/routes/notification.route.js";
 import eventRouter from "./src/routes/event.route.js";
 
 // router declaration
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/books", bookRouter);
-app.use("/api/v1/notifications", notificationRouter);
 app.use("/api/v1/events", eventRouter);
 
 // global error handling middleware

@@ -3,15 +3,14 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { Book } from "../model/Book.model.js";
 import { IssueBooks } from "../model/Issue.model.js";
-import { Notification } from "../model/Notification.model.js";
 
 const requestBook = asyncHandler(async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
 
   const book = await Book.findById(id);
-  if (!book) throw new ApiError(404, "Book is not found")
+  if (!book) throw new ApiError(404, "Book is not found");
 
-  if (book.availableCopies <= 0) throw new ApiError(400, "Book is not Available ")
+  if (book.availableCopies <= 0) throw new ApiError(400, "Book is not Available ");
 
   const existingIssue = await IssueBooks.findOne({
     user: req.user?._id,
@@ -19,8 +18,8 @@ const requestBook = asyncHandler(async (req, res) => {
     status: {
       $in: ["pending", "approved"]
     }
-  })
-  if (existingIssue) throw new ApiError(400, "Book is allready requested")
+  });
+  if (existingIssue) throw new ApiError(400, "Book is allready requested");
 
   const issued = await IssueBooks.create({
     user: req?.user?._id,
@@ -28,47 +27,35 @@ const requestBook = asyncHandler(async (req, res) => {
     status: "pending"
   });
 
-  await Notification.create({
-    user: req?.user?._id,
-    message: `Your request for book "${book.title}" was submitted successfully. Waiting for admin approval.`,
-    type: "info"
-  });
-
   return res
     .status(201)
-    .json(new ApiResponse(201, issued, "Book request sent successfully"))
-})
+    .json(new ApiResponse(201, issued, "Book request sent successfully"));
+});
 
 const approveIssue = asyncHandler(async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
 
   const issue = await IssueBooks.findById(id);
   if (!issue) throw new ApiError(404, "Issue request not found");
 
   const book = await Book.findById(issue.book);
-  if (!book) throw new ApiError(404, "Book is not found")
+  if (!book) throw new ApiError(404, "Book is not found");
 
-  if (issue.status !== "pending") throw new ApiError(400, "Only pending requests can be approved.")
+  if (issue.status !== "pending") throw new ApiError(400, "Only pending requests can be approved.");
 
-  if (book.availableCopies <= 0) throw new ApiError(400, "Book is not Available")
-  book.availableCopies--
+  if (book.availableCopies <= 0) throw new ApiError(400, "Book is not Available");
+  book.availableCopies--;
 
-  await book.save()
+  await book.save();
 
-  issue.status = "approved"
-  issue.approvedBy = req?.user?._id
+  issue.status = "approved";
+  issue.approvedBy = req?.user?._id;
   const dueDate = new Date();
   dueDate.setDate(dueDate.getDate() + 7);
 
   issue.issueDate = new Date();
   issue.dueDate = dueDate;
-  await issue.save()
-
-  await Notification.create({
-    user: issue.user,
-    message: `Your borrow request for book "${book.title}" has been approved. Please collect it.`,
-    type: "success"
-  });
+  await issue.save();
 
   return res
     .status(200)
@@ -76,22 +63,15 @@ const approveIssue = asyncHandler(async (req, res) => {
 });
 
 const rejectIssue = asyncHandler(async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
 
   const issue = await IssueBooks.findById(id);
   if (!issue) throw new ApiError(404, "Issue request not found");
 
-  if (issue.status !== "pending") throw new ApiError(400, "Only pending requests can be reject.")
+  if (issue.status !== "pending") throw new ApiError(400, "Only pending requests can be reject.");
 
-  issue.status = "rejected"
-  await issue.save()
-
-  const book = await Book.findById(issue.book);
-  await Notification.create({
-    user: issue.user,
-    message: `Your borrow request for book "${book.title || 'requested book'}" has been rejected.`,
-    type: "alert"
-  });
+  issue.status = "rejected";
+  await issue.save();
 
   return res
     .status(200)
@@ -99,19 +79,19 @@ const rejectIssue = asyncHandler(async (req, res) => {
 });
 
 const returnBook = asyncHandler(async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
   const issue = await IssueBooks.findById(id);
   if (!issue) throw new ApiError(404, "Issue request not found");
 
   const book = await Book.findById(issue.book);
-  if (!book) throw new ApiError(404, "Book is not found")
+  if (!book) throw new ApiError(404, "Book is not found");
 
-  if (issue.status !== "approved") throw new ApiError(400, "Only approved issue requests can be returned.")
+  if (issue.status !== "approved") throw new ApiError(400, "Only approved issue requests can be returned.");
 
-  if (book.availableCopies >= book.copies) throw new ApiError(400, "Available copies cannot exceed total copies.")
-  book.availableCopies++
+  if (book.availableCopies >= book.copies) throw new ApiError(400, "Available copies cannot exceed total copies.");
+  book.availableCopies++;
 
-  await book.save()
+  await book.save();
 
   const returnDate = new Date();
   const dueDate = new Date(issue.dueDate);
@@ -128,21 +108,7 @@ const returnBook = asyncHandler(async (req, res) => {
   issue.fineAmount = fine;
   issue.fineStatus = fine > 0 ? "unpaid" : "paid";
 
-  await issue.save()
-
-  if (fine > 0) {
-    await Notification.create({
-      user: issue.user,
-      message: `Book "${book.title}" was marked as returned. An overdue fine of ₹${fine} has been generated.`,
-      type: "alert"
-    });
-  } else {
-    await Notification.create({
-      user: issue.user,
-      message: `Book "${book.title}" was marked as returned successfully. Thank you!`,
-      type: "success"
-    });
-  }
+  await issue.save();
 
   return res
     .status(200)
@@ -157,12 +123,6 @@ const payFine = asyncHandler(async (req, res) => {
   issue.fineStatus = "paid";
   await issue.save();
 
-  await Notification.create({
-    user: issue.user,
-    message: `Your fine of ₹${issue.fineAmount} for book "${issue.book?.title}" has been paid successfully.`,
-    type: "success"
-  });
-
   return res
     .status(200)
     .json(new ApiResponse(200, issue, "Fine paid successfully"));
@@ -176,12 +136,6 @@ const waiveFine = asyncHandler(async (req, res) => {
   issue.fineStatus = "waived";
   await issue.save();
 
-  await Notification.create({
-    user: issue.user,
-    message: `Your fine of ₹${issue.fineAmount} for book "${issue.book?.title}" has been waived by the admin.`,
-    type: "info"
-  });
-
   return res
     .status(200)
     .json(new ApiResponse(200, issue, "Fine waived successfully"));
@@ -192,7 +146,7 @@ const getMyIssuedBooks = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, books || [], "My issued books fetched successfully."))
+    .json(new ApiResponse(200, books || [], "My issued books fetched successfully."));
 });
 
 const getAllIssuedBooks = asyncHandler(async (req, res) => {
@@ -203,7 +157,7 @@ const getAllIssuedBooks = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, issues, "All issued books fetched successfully."))
+    .json(new ApiResponse(200, issues, "All issued books fetched successfully."));
 });
 
 export {

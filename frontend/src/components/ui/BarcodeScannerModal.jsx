@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Modal from './Modal';
-import { FiCamera, FiSearch } from 'react-icons/fi';
+import { FiCamera, FiSearch, FiCheck, FiZap, FiBookOpen } from 'react-icons/fi';
+import { getBookCover } from '../../utils/bookCover';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
 
@@ -89,7 +90,7 @@ const BarcodeScannerModal = ({ isOpen, onClose, books = [] }) => {
         {scannedBook && (
           <div className="p-4 rounded-2xl glass-panel border border-cyan-500/30 flex items-start gap-4">
             <img
-              src={scannedBook.cover?.url || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'}
+              src={getBookCover(scannedBook)}
               alt={scannedBook.title}
               className="w-16 h-20 object-cover rounded-xl border border-slate-800"
             />

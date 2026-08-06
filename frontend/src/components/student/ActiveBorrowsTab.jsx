@@ -1,5 +1,6 @@
 import React from 'react';
 import { FiClock, FiCalendar, FiBookOpen } from 'react-icons/fi';
+import { getBookCover } from '../../utils/bookCover';
 import Badge from '../ui/Badge';
 import EmptyState from '../ui/EmptyState';
 
@@ -38,7 +39,7 @@ const ActiveBorrowsTab = ({ approvedBorrows = [], onNavigateToCatalog }) => {
               >
                 <div className="flex items-start gap-4">
                   <img
-                    src={issue.book?.cover?.url || 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80'}
+                    src={getBookCover(issue.book)}
                     alt={issue.book?.title}
                     className="w-16 h-20 object-cover rounded-xl border border-slate-800 flex-shrink-0"
                   />

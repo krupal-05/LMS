@@ -1,43 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { FiMenu, FiX, FiLogOut, FiUser, FiBell, FiBookOpen, FiGrid, FiShield, FiSun, FiMoon } from 'react-icons/fi';
-import api from '../services/api';
+import { FiMenu, FiX, FiLogOut, FiUser, FiBookOpen, FiGrid, FiShield, FiSun, FiMoon } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
   const { user, logoutAction, loading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [notifications, setNotifications] = useState([]);
-  const [showNotifications, setShowNotifications] = useState(false);
   const navigate = useNavigate();
-
-  const fetchNotifications = async () => {
-    if (!user) return;
-    try {
-      const res = await api.get('/notifications');
-      setNotifications(res.data?.data || []);
-    } catch (err) {
-      console.error('Failed to load notifications', err);
-    }
-  };
-
-  useEffect(() => {
-    fetchNotifications();
-    const interval = setInterval(fetchNotifications, 15000);
-    return () => clearInterval(interval);
-  }, [user]);
-
-  const handleMarkAsRead = async (id) => {
-    try {
-      await api.post(`/notifications/read/${id}`);
-      setNotifications((prev) => prev.map((n) => (n._id === id ? { ...n, read: true } : n)));
-    } catch (err) {
-      console.error('Failed to read notification', err);
-    }
-  };
 
   const navLinkClass = ({ isActive }) =>
     `flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${
@@ -47,7 +19,6 @@ const Navbar = () => {
     }`;
 
   const dashboardPath = user?.role === 'admin' ? '/admin/dashboard' : '/student/dashboard';
-  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <header className="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80 backdrop-blur-xl bg-slate-950/80">
@@ -57,12 +28,12 @@ const Navbar = () => {
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-accent p-0.5 shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
               <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <img  src='/logo.png' className="w-10 h-10 text-cyan-400" />
+                <img src="/logo.png" alt="Logo" className="w-10 h-10 text-cyan-400" />
               </div>
             </div>
             <div className="flex flex-col">
               <span className="text-base font-extrabold tracking-tight text-slate-100 group-hover:text-cyan-400 transition-colors">
-                <span className="text-gradient">Library</span> Management Syatem
+                <span className="text-gradient">Library</span> Management System
               </span>
               <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Library Suite</span>
             </div>
@@ -71,11 +42,11 @@ const Navbar = () => {
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-2 bg-slate-900/60 border border-slate-800/80 p-1 rounded-2xl">
             <NavLink to="/" className={navLinkClass} end>
-              <FiBookOpen className="w-4 h-4" />  Home
+              <FiBookOpen className="w-4 h-4" /> Home
             </NavLink>
             {user && (
               <NavLink to={dashboardPath} className={navLinkClass}>
-                <FiGrid className="w-4 h-4" />  Dashboard
+                <FiGrid className="w-4 h-4" /> Dashboard
               </NavLink>
             )}
           </nav>
@@ -95,68 +66,6 @@ const Navbar = () => {
 
             {user ? (
               <div className="flex items-center gap-3">
-                {/* Notifications Dropdown */}
-                <div className="relative">
-                  <button
-                    onClick={() => setShowNotifications(!showNotifications)}
-                    className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-cyan-400 hover:border-slate-700 transition-all relative cursor-pointer"
-                    aria-label="Toggle notifications"
-                  >
-                    <FiBell className="w-4 h-4" />
-                    {unreadCount > 0 && (
-                      <span className="absolute -top-1 -right-1 bg-cyan-500 text-slate-950 text-[10px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center shadow-md animate-pulse">
-                        {unreadCount}
-                      </span>
-                    )}
-                  </button>
-
-                  <AnimatePresence>
-                    {showNotifications && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                        className="absolute right-0 mt-2 w-80 glass-panel border border-slate-800 rounded-2xl shadow-2xl p-4 z-50"
-                      >
-                        <div className="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
-                          <span className="text-xs font-bold text-slate-200">System Notifications</span>
-                          {unreadCount > 0 && (
-                            <span className="text-[10px] font-semibold text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 px-2 py-0.5 rounded-full">
-                              {unreadCount} New
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="max-h-64 overflow-y-auto space-y-2 pr-1">
-                          {notifications.length === 0 ? (
-                            <p className="text-center py-6 text-xs text-slate-500">No recent alerts.</p>
-                          ) : (
-                            notifications.map((n) => (
-                              <div
-                                key={n._id}
-                                onClick={() => handleMarkAsRead(n._id)}
-                                className={`p-3 rounded-xl border text-xs cursor-pointer transition-all ${
-                                  n.read
-                                    ? 'bg-slate-900/40 border-slate-800/50 text-slate-400'
-                                    : 'bg-cyan-500/10 border-cyan-500/30 text-slate-100 font-medium'
-                                }`}
-                              >
-                                <div className="flex justify-between items-start gap-2">
-                                  <p className="leading-snug">{n.message}</p>
-                                  {!n.read && <span className="w-2 h-2 rounded-full bg-cyan-400 flex-shrink-0 mt-1" />}
-                                </div>
-                                <span className="text-[10px] font-mono text-slate-400 mt-1 block">
-                                  {new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                </span>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
                 {/* User Avatar & Role Badge */}
                 <div className="flex items-center gap-2.5 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-2xl">
                   {user.avatar ? (

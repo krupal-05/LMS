@@ -23,8 +23,10 @@ import { motion } from 'framer-motion';
 import api from '../services/api';
 import Navbar from '../components/layout/Navbar';
 import BookCard from '../components/cards/BookCard';
+import HappeningHero from '../components/home/HappeningHero';
+import WorkingHoursSection from '../components/home/WorkingHoursSection';
+import LibraryRulesSection from '../components/home/LibraryRulesSection';
 import StatCard from '../components/cards/StatCard';
-import FeaturedBookStack from '../components/cards/FeaturedBookStack';
 import FaqAccordion from '../components/ui/FaqAccordion';
 import EmptyState from '../components/ui/EmptyState';
 import { BookCardSkeleton } from '../components/ui/Skeleton';
@@ -175,131 +177,64 @@ const Home = () => {
     <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col justify-between selection:bg-cyan-500 selection:text-slate-950">
       <Navbar />
 
-      {/* SECTION 1: HYBRID DUAL-COLUMN HERO SECTION */}
-      <section className="relative pt-8 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full overflow-hidden">
-        {/* Glow Spheres */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[450px] bg-gradient-to-tr from-cyan-500/10 via-blue-500/10 to-purple-500/10 blur-3xl pointer-events-none -z-10" />
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          {/* Left Column: Command Hub Hero Content */}
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-panel border border-cyan-500/30 text-cyan-300 text-xs font-semibold tracking-wide"
-            >
-              <FiZap className="w-3.5 h-3.5 text-cyan-400" /> Enterprise Library Circulation Suite
-            </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-100 leading-tight"
-            >
-              Modern Knowledge <br />
-              <span className="text-gradient">Circulation Suite</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-xl mx-auto lg:mx-0"
-            >
-              Search catalog items, reserve digital & physical copies, track borrow due dates, and streamline institutional administrative circulation workflows.
-            </motion.p>
-
-            {/* Command Bar Search */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="pt-2 max-w-lg mx-auto lg:mx-0 space-y-3"
-            >
-              <form onSubmit={handleSearchSubmit} className="glass-panel p-2 rounded-2xl border border-slate-800 flex items-center gap-2 shadow-2xl">
-                <FiSearch className="w-5 h-5 text-slate-400 ml-3" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search by book title, author, or ISBN..."
-                  className="w-full bg-transparent text-xs sm:text-sm text-slate-100 placeholder-slate-500 focus:outline-none py-2"
-                />
-                <button
-                  type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-gradient-accent text-white font-semibold text-xs hover:opacity-90 transition-all shadow-md shadow-cyan-500/20 cursor-pointer whitespace-nowrap"
-                >
-                  Explore Catalog
-                </button>
-              </form>
-
-              {/* Quick Tags */}
-              <div className="flex items-center justify-center lg:justify-start gap-2 text-xs text-slate-400">
-                <span className="text-[11px] font-mono text-slate-500">Popular:</span>
-                {['computer science', 'engineering', 'fiction'].map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => {
-                      setSelectedCategory(t);
-                      setPage(1);
-                    }}
-                    className="hover:text-cyan-400 transition-colors capitalize text-[11px] underline underline-offset-4"
-                  >
-                    #{t}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right Column: 3D Floating Book Stack Showcase */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="lg:col-span-5"
-          >
-            <FeaturedBookStack book={books[0]} onRequest={handleRequestBook} user={user} />
-          </motion.div>
-        </div>
+      {/* SECTION 1: WHAT'S HAPPENING AT THE LIBRARY HERO */}
+      <HappeningHero
+        events={events}
+        books={books}
+        stats={stats}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        handleSearchSubmit={handleSearchSubmit}
+        setSelectedCategory={setSelectedCategory}
+        setPage={setPage}
+        onRequestBook={handleRequestBook}
+        onScrollToEvents={() => {
+          const el = document.getElementById('events-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
+        onScrollToCatalog={() => {
+          const el = document.getElementById('catalog-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
+      />
 
         {/* SECTION 2: LIVE METRIC CARDS WITH NUMBER SCROLLING COUNTERS */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-16">
-          <StatCard
-            title="Catalog Inventory"
-            numericValue={stats.totalBooks}
-            suffix=" Books"
-            icon={FiBookOpen}
-            color="cyan"
-            subtext="Verified holdings in database"
-          />
-          <StatCard
-            title="Registered Members"
-            numericValue={stats.totalMembers}
-            suffix=" Students"
-            icon={FiUsers}
-            color="emerald"
-            subtext="Active library members"
-          />
-          <StatCard
-            title="Active Borrows"
-            numericValue={stats.activeBorrows}
-            suffix=" Issued"
-            icon={FiZap}
-            color="amber"
-            subtext="Currently checked out"
-          />
-          <StatCard
-            title="Completed Returns"
-            numericValue={stats.completedBorrows}
-            suffix=" Returned"
-            icon={FiShield}
-            color="purple"
-            subtext="Circulation volume"
-          />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+            <StatCard
+              title="Catalog Inventory"
+              numericValue={stats.totalBooks}
+              suffix=" Books"
+              icon={FiBookOpen}
+              color="cyan"
+              subtext="Verified holdings in database"
+            />
+            <StatCard
+              title="Registered Members"
+              numericValue={stats.totalMembers}
+              suffix=" Students"
+              icon={FiUsers}
+              color="emerald"
+              subtext="Active library members"
+            />
+            <StatCard
+              title="Active Borrows"
+              numericValue={stats.activeBorrows}
+              suffix=" Issued"
+              icon={FiZap}
+              color="amber"
+              subtext="Currently checked out"
+            />
+            <StatCard
+              title="Completed Returns"
+              numericValue={stats.completedBorrows}
+              suffix=" Returned"
+              icon={FiShield}
+              color="purple"
+              subtext="Circulation volume"
+            />
+          </div>
         </div>
-      </section>
 
       {/* SECTION 3: CURATED COLLECTIONS SHOWCASE (EDITORIAL CAROUSEL) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
@@ -322,11 +257,10 @@ const Home = () => {
                 <button
                   key={tab.id}
                   onClick={() => setActiveCollectionTab(tab.id)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                    activeCollectionTab === tab.id
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeCollectionTab === tab.id
                       ? 'bg-gradient-accent text-white shadow-md'
                       : 'text-slate-400 hover:text-slate-200'
-                  }`}
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -336,15 +270,15 @@ const Home = () => {
 
           {/* Books Row Preview */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {books.slice(0, 4).map((book) => (
-              <BookCard key={book._id} book={book} userRole={user?.role} onRequest={handleRequestBook} />
+            {books.slice(0, 4).map((book, idx) => (
+              <BookCard key={book._id || `preview-${idx}`} book={book} userRole={user?.role} onRequest={handleRequestBook} />
             ))}
           </div>
         </div>
       </section>
 
       {/* SECTION 4: MAIN CATALOG EXPLORER GRID */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
+      <section id="catalog-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
             <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
@@ -362,11 +296,10 @@ const Home = () => {
                   setSelectedCategory(cat);
                   setPage(1);
                 }}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold capitalize whitespace-nowrap transition-all cursor-pointer ${
-                  selectedCategory === cat
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold capitalize whitespace-nowrap transition-all cursor-pointer ${selectedCategory === cat
                     ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
                     : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200'
-                }`}
+                  }`}
               >
                 {cat}
               </button>
@@ -396,9 +329,9 @@ const Home = () => {
         ) : (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-              {books.map((book) => (
+              {books.map((book, idx) => (
                 <BookCard
-                  key={book._id}
+                  key={book._id || `catalog-${idx}`}
                   book={book}
                   userRole={user?.role}
                   onRequest={handleRequestBook}
@@ -435,9 +368,11 @@ const Home = () => {
         )}
       </section>
 
+      {/* SECTION 5: LIBRARY OPERATING SCHEDULE & WORKING HOURS */}
+      <WorkingHoursSection />
 
       {/* SECTION 6: UPCOMING LIBRARY EVENTS & WORKSHOPS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full border-t border-slate-800/80">
+      <section id="events-section" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full border-t border-slate-800/80">
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
             <FiCalendar className="text-cyan-400" /> Upcoming Library Events & Workshops
@@ -484,7 +419,10 @@ const Home = () => {
         </div>
       </section>
 
-      {/* SECTION 7: INSTITUTIONAL LIBRARY POLICIES & FAQ ACCORDION */}
+      {/* SECTION 7: INSTITUTIONAL LIBRARY CODE OF CONDUCT & RULES */}
+      <LibraryRulesSection />
+
+      {/* SECTION 8: INSTITUTIONAL LIBRARY POLICIES & FAQ ACCORDION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full border-t border-slate-800/80">
         <div className="max-w-5xl mx-auto space-y-6">
           <div className="text-center space-y-2">

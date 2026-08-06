@@ -2,12 +2,13 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FiBookOpen, FiBookmark, FiCheck } from 'react-icons/fi';
 import Badge from '../ui/Badge';
+import { getBookCover } from '../../utils/bookCover';
 
 const BookCard = ({ book, onRequest, isRequested, isPending, userRole, onEdit, onDelete }) => {
-  const { title, author, category, copies, availableCopies, cover, isbn, description } = book;
+  const { title, author, category, copies, availableCopies, isbn, description } = book || {};
 
   const isAvailable = availableCopies > 0;
-  const coverUrl = cover?.url || `https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=600&q=80`;
+  const coverUrl = getBookCover(book);
 
   return (
     <motion.div
