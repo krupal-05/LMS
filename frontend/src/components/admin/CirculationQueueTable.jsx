@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiClock, FiSend, FiDownload } from 'react-icons/fi';
 import Badge from '../ui/Badge';
 import EmptyState from '../ui/EmptyState';
+import Pagination from '../ui/Pagination';
 
 const CirculationQueueTable = ({
   issues = [],
@@ -13,11 +14,31 @@ const CirculationQueueTable = ({
   actionLoadingId,
   onSendReminders,
   sendingReminders,
-  onExportCSV
+  onExportCSV,
+  page = 1,
+  setPage,
+  limit = 10,
+  setLimit,
+  pagination = { totalIssues: 0, totalPages: 1 }
 }) => {
+  const [localPage, setLocalPage] = useState(1);
+  const [localLimit, setLocalLimit] = useState(10);
+
+  const activePage = setPage ? page : localPage;
+  const activeLimit = setLimit ? limit : localLimit;
+  const changePage = setPage || setLocalPage;
+  const changeLimit = setLimit || setLocalLimit;
+
   const filteredIssues = issues.filter(
     (i) => issueFilter === 'all' || i.status === issueFilter
   );
+
+  const totalItems = pagination?.totalIssues || filteredIssues.length;
+  const totalPages = pagination?.totalPages || (Math.ceil(totalItems / activeLimit) || 1);
+
+  const displayIssues = (setPage && pagination?.totalPages > 1)
+    ? filteredIssues
+    : filteredIssues.slice((activePage - 1) * activeLimit, activePage * activeLimit);
 
   return (
     <div className="space-y-6">
@@ -32,7 +53,10 @@ const CirculationQueueTable = ({
             {['all', 'pending', 'approved', 'returned', 'rejected'].map((f) => (
               <button
                 key={f}
-                onClick={() => setIssueFilter(f)}
+                onClick={() => {
+                  setIssueFilter(f);
+                  changePage(1);
+                }}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold capitalize whitespace-nowrap transition-all cursor-pointer ${
                   issueFilter === f
                     ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
@@ -68,75 +92,91 @@ const CirculationQueueTable = ({
           description="There are currently no borrow requests matching the selected filter status."
         />
       ) : (
-        <div className="glass-panel rounded-2xl border border-slate-800 overflow-hidden shadow-xl">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-slate-900/80 uppercase text-[10px] font-mono text-slate-400 border-b border-slate-800">
-                <tr>
-                  <th className="p-4">Book Title</th>
-                  <th className="p-4">Student Email</th>
-                  <th className="p-4">Issue Date</th>
-                  <th className="p-4">Due Date</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-800/60">
-                {filteredIssues.map((issue) => (
-                  <tr key={issue._id} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="p-4 font-semibold text-slate-100">{issue.book?.title || 'Unknown Title'}</td>
-                    <td className="p-4 text-slate-300 font-mono">{issue.user?.email || 'N/A'}</td>
-                    <td className="p-4 font-mono text-slate-400">
-                      {issue.issueDate ? new Date(issue.issueDate).toLocaleDateString() : 'Pending'}
-                    </td>
-                    <td className="p-4 font-mono text-slate-400">
-                      {issue.dueDate ? new Date(issue.dueDate).toLocaleDateString() : 'N/A'}
-                    </td>
-                    <td className="p-4">
-                      <Badge status={issue.status}>{issue.status}</Badge>
-                    </td>
-                    <td className="p-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        {issue.status === 'pending' && (
-                          <>
-                            <button
-                              onClick={() => onApprove(issue._id)}
-                              disabled={actionLoadingId === issue._id}
-                              className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 cursor-pointer"
-                            >
-                              Approve
-                            </button>
-                            <button
-                              onClick={() => onReject(issue._id)}
-                              disabled={actionLoadingId === issue._id}
-                              className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 cursor-pointer"
-                            >
-                              Reject
-                            </button>
-                          </>
-                        )}
-
-                        {issue.status === 'approved' && (
-                          <button
-                            onClick={() => onReturn(issue._id)}
-                            disabled={actionLoadingId === issue._id}
-                            className="px-3 py-1 rounded-lg text-xs font-semibold bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 border border-cyan-500/30 cursor-pointer"
-                          >
-                            Mark Returned
-                          </button>
-                        )}
-
-                        {['returned', 'rejected'].includes(issue.status) && (
-                          <span className="text-slate-500 text-xs italic">Closed</span>
-                        )}
-                      </div>
-                    </td>
+        <>
+          <div className="glass-panel rounded-2xl border border-slate-800 overflow-hidden shadow-xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs text-slate-300">
+                <thead className="bg-slate-900/80 uppercase text-[10px] font-mono text-slate-400 border-b border-slate-800">
+                  <tr>
+                    <th className="p-4">Book Title</th>
+                    <th className="p-4">Student Email</th>
+                    <th className="p-4">Issue Date</th>
+                    <th className="p-4">Due Date</th>
+                    <th className="p-4">Status</th>
+                    <th className="p-4 text-right">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60">
+                  {displayIssues.map((issue) => (
+                    <tr key={issue._id} className="hover:bg-slate-800/40 transition-colors">
+                      <td className="p-4 font-semibold text-slate-100">{issue.book?.title || 'Unknown Title'}</td>
+                      <td className="p-4 text-slate-300 font-mono">{issue.user?.email || 'N/A'}</td>
+                      <td className="p-4 font-mono text-slate-400">
+                        {issue.issueDate ? new Date(issue.issueDate).toLocaleDateString() : 'Pending'}
+                      </td>
+                      <td className="p-4 font-mono text-slate-400">
+                        {issue.dueDate ? new Date(issue.dueDate).toLocaleDateString() : 'N/A'}
+                      </td>
+                      <td className="p-4">
+                        <Badge status={issue.status}>{issue.status}</Badge>
+                      </td>
+                      <td className="p-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          {issue.status === 'pending' && (
+                            <>
+                              <button
+                                onClick={() => onApprove(issue._id)}
+                                disabled={actionLoadingId === issue._id}
+                                className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 cursor-pointer"
+                              >
+                                Approve
+                              </button>
+                              <button
+                                onClick={() => onReject(issue._id)}
+                                disabled={actionLoadingId === issue._id}
+                                className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-rose-500/20 text-rose-300 hover:bg-rose-500/30 cursor-pointer"
+                              >
+                                Reject
+                              </button>
+                            </>
+                          )}
+
+                          {issue.status === 'approved' && (
+                            <button
+                              onClick={() => onReturn(issue._id)}
+                              disabled={actionLoadingId === issue._id}
+                              className="px-3 py-1 rounded-lg text-xs font-semibold bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 border border-cyan-500/30 cursor-pointer"
+                            >
+                              Mark Returned
+                            </button>
+                          )}
+
+                          {['returned', 'rejected'].includes(issue.status) && (
+                            <span className="text-slate-500 text-xs italic">Closed</span>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+
+          <Pagination
+            currentPage={activePage}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            limit={activeLimit}
+            onPageChange={(p) => changePage(p)}
+            onLimitChange={(l) => {
+              changeLimit(l);
+              changePage(1);
+            }}
+            limitOptions={[5, 10, 20, 50]}
+            itemLabel="requests"
+          />
+        </>
       )}
     </div>
   );

@@ -142,22 +142,100 @@ const waiveFine = asyncHandler(async (req, res) => {
 });
 
 const getMyIssuedBooks = asyncHandler(async (req, res) => {
-  const books = await IssueBooks.find({ user: req?.user?._id }).populate("book").sort({ createdAt: -1 });
+  const page = Math.max(1, parseInt(req.query.page) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
+  const skip = (page - 1) * limit;
+  const { status } = req.query;
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, books || [], "My issued books fetched successfully."));
+  const query = { user: req?.user?._id };
+  if (status && status !== "all") {
+    query.status = status;
+  }
+
+  const [issues, totalIssues] = await Promise.all([
+    IssueBooks.find(query)
+      .populate("book")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    IssueBooks.countDocuments(query)
+  ]);
+
+  const totalPages = Math.ceil(totalIssues / limit) || 1;
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        issues: issues || [],
+        pagination: {
+          totalIssues,
+          currentPage: page,
+          totalPages,
+          limit,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1
+        }
+      },
+      "My issued books fetched successfully."
+    )
+  );
 });
 
 const getAllIssuedBooks = asyncHandler(async (req, res) => {
-  const issues = await IssueBooks.find()
-    .populate("user", "fullName email")
-    .populate("book", "title author cover category")
-    .sort({ createdAt: -1 });
+  const page = Math.max(1, parseInt(req.query.page) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 10));
+  const skip = (page - 1) * limit;
+  const { status, search } = req.query;
 
-  return res
-    .status(200)
-    .json(new ApiResponse(200, issues, "All issued books fetched successfully."));
+  const query = {};
+  if (status && status !== "all") {
+    query.status = status;
+  }
+
+  const [issues, totalIssues] = await Promise.all([
+    IssueBooks.find(query)
+      .populate("user", "fullName email")
+      .populate("book", "title author cover category isbn")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    IssueBooks.countDocuments(query)
+  ]);
+
+  let filteredIssues = issues;
+  if (search && search.trim()) {
+    const s = search.trim().toLowerCase();
+    filteredIssues = issues.filter(
+      (i) =>
+        i.book?.title?.toLowerCase().includes(s) ||
+        i.book?.author?.toLowerCase().includes(s) ||
+        i.user?.email?.toLowerCase().includes(s) ||
+        i.user?.fullName?.toLowerCase().includes(s)
+    );
+  }
+
+  const totalPages = Math.ceil(totalIssues / limit) || 1;
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        issues: filteredIssues,
+        pagination: {
+          totalIssues,
+          currentPage: page,
+          totalPages,
+          limit,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1
+        }
+      },
+      "All issued books fetched successfully."
+    )
+  );
 });
 
 export {

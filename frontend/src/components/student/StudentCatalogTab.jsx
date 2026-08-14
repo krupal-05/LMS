@@ -3,6 +3,7 @@ import { FiSearch, FiBookOpen } from 'react-icons/fi';
 import BookCard from '../cards/BookCard';
 import EmptyState from '../ui/EmptyState';
 import { BookCardSkeleton } from '../ui/Skeleton';
+import Pagination from '../ui/Pagination';
 
 const StudentCatalogTab = ({
   books = [],
@@ -12,7 +13,12 @@ const StudentCatalogTab = ({
   categoryFilter,
   setCategoryFilter,
   loading,
-  onRequestBook
+  onRequestBook,
+  page = 1,
+  setPage,
+  limit = 12,
+  setLimit,
+  pagination = { totalBooks: 0, totalPages: 1 }
 }) => {
   const categories = ['all', 'computer science', 'fiction', 'engineering', 'science', 'general'];
 
@@ -26,6 +32,13 @@ const StudentCatalogTab = ({
     return matchesCategory && matchesSearch;
   });
 
+  const totalItems = pagination?.totalBooks || filteredCatalog.length;
+  const totalPages = pagination?.totalPages || (Math.ceil(totalItems / limit) || 1);
+
+  const displayCatalog = (setPage && pagination?.totalPages > 1)
+    ? filteredCatalog
+    : filteredCatalog.slice((page - 1) * limit, page * limit);
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -34,7 +47,10 @@ const StudentCatalogTab = ({
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              if (setPage) setPage(1);
+            }}
             placeholder="Search library catalog by title, author, or ISBN..."
             className="w-full bg-transparent text-xs text-slate-100 placeholder-slate-500 focus:outline-none"
           />
@@ -44,7 +60,10 @@ const StudentCatalogTab = ({
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setCategoryFilter(cat)}
+              onClick={() => {
+                setCategoryFilter(cat);
+                if (setPage) setPage(1);
+              }}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold capitalize whitespace-nowrap transition-all cursor-pointer ${
                 categoryFilter === cat
                   ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40'
@@ -72,27 +91,44 @@ const StudentCatalogTab = ({
           onAction={() => {
             setSearchQuery('');
             setCategoryFilter('all');
+            if (setPage) setPage(1);
           }}
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {filteredCatalog.map((book) => {
-            const existingIssue = myIssues.find((i) => (i.book?._id || i.book) === book._id);
-            const isRequested = Boolean(existingIssue);
-            const isPending = existingIssue?.status === 'pending';
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {displayCatalog.map((book) => {
+              const existingIssue = myIssues.find((i) => (i.book?._id || i.book) === book._id);
+              const isRequested = Boolean(existingIssue);
+              const isPending = existingIssue?.status === 'pending';
 
-            return (
-              <BookCard
-                key={book._id}
-                book={book}
-                userRole="student"
-                isRequested={isRequested}
-                isPending={isPending}
-                onRequest={onRequestBook}
-              />
-            );
-          })}
-        </div>
+              return (
+                <BookCard
+                  key={book._id}
+                  book={book}
+                  userRole="student"
+                  isRequested={isRequested}
+                  isPending={isPending}
+                  onRequest={onRequestBook}
+                />
+              );
+            })}
+          </div>
+
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            limit={limit}
+            onPageChange={(p) => setPage && setPage(p)}
+            onLimitChange={(l) => {
+              if (setLimit) setLimit(l);
+              if (setPage) setPage(1);
+            }}
+            limitOptions={[8, 12, 24, 48]}
+            itemLabel="books"
+          />
+        </>
       )}
     </div>
   );

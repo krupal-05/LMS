@@ -3,6 +3,7 @@ import { FiSearch, FiPlus, FiDownload, FiBookOpen } from 'react-icons/fi';
 import BookCard from '../cards/BookCard';
 import EmptyState from '../ui/EmptyState';
 import { BookCardSkeleton } from '../ui/Skeleton';
+import Pagination from '../ui/Pagination';
 
 const InventoryGrid = ({
   books = [],
@@ -12,7 +13,12 @@ const InventoryGrid = ({
   onOpenAddBook,
   onEditBook,
   onDeleteBook,
-  onExportCSV
+  onExportCSV,
+  page = 1,
+  setPage,
+  limit = 12,
+  setLimit,
+  pagination = { totalBooks: 0, totalPages: 1 }
 }) => {
   const filteredBooks = books.filter(
     (b) =>
@@ -22,6 +28,14 @@ const InventoryGrid = ({
       b.isbn?.toLowerCase().includes(bookSearch.toLowerCase())
   );
 
+  const totalItems = pagination?.totalBooks || filteredBooks.length;
+  const totalPages = pagination?.totalPages || (Math.ceil(totalItems / limit) || 1);
+
+  // If server side pagination is active, display returned books; else slice for client side backup
+  const displayBooks = (setPage && pagination?.totalPages > 1) 
+    ? filteredBooks 
+    : filteredBooks.slice((page - 1) * limit, page * limit);
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -30,7 +44,10 @@ const InventoryGrid = ({
           <input
             type="text"
             value={bookSearch}
-            onChange={(e) => setBookSearch(e.target.value)}
+            onChange={(e) => {
+              setBookSearch(e.target.value);
+              if (setPage) setPage(1);
+            }}
             placeholder="Search catalog inventory by title, author, or ISBN..."
             className="w-full bg-transparent text-xs text-slate-100 placeholder-slate-500 focus:outline-none"
           />
@@ -64,20 +81,39 @@ const InventoryGrid = ({
           title="No matching books in inventory"
           description="We couldn't find any books matching your search query."
           actionLabel="Clear Search"
-          onAction={() => setBookSearch('')}
+          onAction={() => {
+            setBookSearch('');
+            if (setPage) setPage(1);
+          }}
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {filteredBooks.map((book) => (
-            <BookCard
-              key={book._id}
-              book={book}
-              userRole="admin"
-              onEdit={onEditBook}
-              onDelete={onDeleteBook}
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {displayBooks.map((book) => (
+              <BookCard
+                key={book._id}
+                book={book}
+                userRole="admin"
+                onEdit={onEditBook}
+                onDelete={onDeleteBook}
+              />
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            totalItems={totalItems}
+            limit={limit}
+            onPageChange={(p) => setPage && setPage(p)}
+            onLimitChange={(l) => {
+              if (setLimit) setLimit(l);
+              if (setPage) setPage(1);
+            }}
+            limitOptions={[8, 12, 24, 48]}
+            itemLabel="books"
+          />
+        </>
       )}
     </div>
   );

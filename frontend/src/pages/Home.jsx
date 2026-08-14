@@ -31,6 +31,7 @@ import FaqAccordion from '../components/ui/FaqAccordion';
 import EmptyState from '../components/ui/EmptyState';
 import { BookCardSkeleton } from '../components/ui/Skeleton';
 import Modal from '../components/ui/Modal';
+import Pagination from '../components/ui/Pagination';
 
 const Home = () => {
   const { user } = useAuth();
@@ -94,7 +95,7 @@ const Home = () => {
   ];
 
   const [page, setPage] = useState(1);
-  const [limit] = useState(8);
+  const [limit, setLimit] = useState(8);
   const [pagination, setPagination] = useState({ totalBooks: 0, totalPages: 1, hasNextPage: false, hasPrevPage: false });
 
   const fetchBooks = async () => {
@@ -155,7 +156,7 @@ const Home = () => {
     fetchBooks();
     fetchStats();
     fetchEvents();
-  }, [page, selectedCategory]);
+  }, [page, limit, selectedCategory]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -340,30 +341,19 @@ const Home = () => {
             </div>
 
             {/* Pagination Controls */}
-            {pagination.totalPages > 1 && (
-              <div className="flex items-center justify-between pt-8 border-t border-slate-800/80 mt-6">
-                <span className="text-xs text-slate-400 font-mono">
-                  Page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalBooks} Total Books)
-                </span>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    disabled={!pagination.hasPrevPage}
-                    onClick={() => setPage((p) => Math.max(1, p - 1))}
-                    className="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-cyan-400 hover:border-slate-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                  >
-                    ← Previous
-                  </button>
-                  <button
-                    disabled={!pagination.hasNextPage}
-                    onClick={() => setPage((p) => p + 1)}
-                    className="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-cyan-400 hover:border-slate-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
-                  >
-                    Next →
-                  </button>
-                </div>
-              </div>
-            )}
+            <Pagination
+              currentPage={page}
+              totalPages={pagination.totalPages || 1}
+              totalItems={pagination.totalBooks || books.length}
+              limit={limit}
+              onPageChange={(newPage) => setPage(newPage)}
+              onLimitChange={(newLimit) => {
+                setLimit(newLimit);
+                setPage(1);
+              }}
+              limitOptions={[8, 12, 24, 48]}
+              itemLabel="books"
+            />
           </>
         )}
       </section>

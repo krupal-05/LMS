@@ -26,25 +26,57 @@ const StudentDashboard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
 
+  // Pagination States
+  const [catalogPage, setCatalogPage] = useState(1);
+  const [catalogLimit, setCatalogLimit] = useState(12);
+  const [catalogPagination, setCatalogPagination] = useState({ totalBooks: 0, totalPages: 1 });
+
+  const [issuePage, setIssuePage] = useState(1);
+  const [issueLimit, setIssueLimit] = useState(10);
+  const [issuePagination, setIssuePagination] = useState({ totalIssues: 0, totalPages: 1 });
+
   // Fetch API Handlers
   const fetchAllBooks = useCallback(async () => {
     try {
-      const res = await api.get('/books/get-all-Books', { params: { limit: 100 } });
+      const res = await api.get('/books/get-all-Books', {
+        params: {
+          page: catalogPage,
+          limit: catalogLimit,
+          search: searchQuery,
+          category: categoryFilter
+        }
+      });
       const booksPayload = res.data?.data;
-      setAllBooks(Array.isArray(booksPayload?.books) ? booksPayload.books : Array.isArray(booksPayload) ? booksPayload : []);
+      if (booksPayload && Array.isArray(booksPayload.books)) {
+        setAllBooks(booksPayload.books);
+        setCatalogPagination(booksPayload.pagination || { totalBooks: booksPayload.books.length, totalPages: 1 });
+      } else {
+        setAllBooks(Array.isArray(booksPayload) ? booksPayload : []);
+      }
     } catch {
       toast.error('Failed to load library catalog');
     }
-  }, []);
+  }, [catalogPage, catalogLimit, searchQuery, categoryFilter]);
 
   const fetchMyIssues = useCallback(async () => {
     try {
-      const res = await api.get('/books/my-issues');
-      setMyIssues(res.data?.data || []);
+      const res = await api.get('/books/my-issues', {
+        params: {
+          page: issuePage,
+          limit: issueLimit
+        }
+      });
+      const issuesPayload = res.data?.data;
+      if (issuesPayload && Array.isArray(issuesPayload.issues)) {
+        setMyIssues(issuesPayload.issues);
+        setIssuePagination(issuesPayload.pagination || { totalIssues: issuesPayload.issues.length, totalPages: 1 });
+      } else {
+        setMyIssues(Array.isArray(issuesPayload) ? issuesPayload : []);
+      }
     } catch {
       toast.error('Failed to load your borrow history');
     }
-  }, []);
+  }, [issuePage, issueLimit]);
 
   const loadDashboardData = useCallback(async () => {
     setLoading(true);
@@ -144,6 +176,11 @@ const StudentDashboard = () => {
               setCategoryFilter={setCategoryFilter}
               loading={loading}
               onRequestBook={handleRequestBook}
+              page={catalogPage}
+              setPage={setCatalogPage}
+              limit={catalogLimit}
+              setLimit={setCatalogLimit}
+              pagination={catalogPagination}
             />
           </div>
         )}
@@ -159,11 +196,25 @@ const StudentDashboard = () => {
             setCategoryFilter={setCategoryFilter}
             loading={loading}
             onRequestBook={handleRequestBook}
+            page={catalogPage}
+            setPage={setCatalogPage}
+            limit={catalogLimit}
+            setLimit={setCatalogLimit}
+            pagination={catalogPagination}
           />
         )}
 
         {/* TAB 3: BORROW HISTORY */}
-        {activeTab === 'borrows' && <BorrowHistoryTab myIssues={myIssues} />}
+        {activeTab === 'borrows' && (
+          <BorrowHistoryTab
+            myIssues={myIssues}
+            page={issuePage}
+            setPage={setIssuePage}
+            limit={issueLimit}
+            setLimit={setIssueLimit}
+            pagination={issuePagination}
+          />
+        )}
 
         {/* TAB 4: FINES PAYMENT */}
         {activeTab === 'fines' && (

@@ -32,63 +32,63 @@ const AdminDashboard = () => {
   const [bookSearch, setBookSearch] = useState('');
   const [issueFilter, setIssueFilter] = useState('pending'); // 'all' | 'pending' | 'approved' | 'returned' | 'rejected'
 
-  // Modal & Drawer States
-  const [isBookModalOpen, setIsBookModalOpen] = useState(false);
-  const [isScannerOpen, setIsScannerOpen] = useState(false);
-  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
-  const [editingBook, setEditingBook] = useState(null);
-  const [selectedIssueForFine, setSelectedIssueForFine] = useState(null);
-  const [submittingBook, setSubmittingBook] = useState(false);
-  const [sendingReminders, setSendingReminders] = useState(false);
-  const [actionLoadingId, setActionLoadingId] = useState(null);
+  // Pagination States
+  const [bookPage, setBookPage] = useState(1);
+  const [bookLimit, setBookLimit] = useState(12);
+  const [bookPagination, setBookPagination] = useState({ totalBooks: 0, totalPages: 1 });
 
-  // Form States
-  const [bookFormData, setBookFormData] = useState({
-    title: '',
-    author: '',
-    description: '',
-    category: 'computer science',
-    copies: '5',
-    isbn: ''
-  });
-  const [coverFile, setCoverFile] = useState(null);
-  const [coverPreview, setCoverPreview] = useState(null);
-
-  const [eventFormData, setEventFormData] = useState({
-    title: '',
-    date: '',
-    time: '',
-    location: '',
-    category: 'Workshop',
-    description: '',
-    speaker: ''
-  });
+  const [issuePage, setIssuePage] = useState(1);
+  const [issueLimit, setIssueLimit] = useState(10);
+  const [issuePagination, setIssuePagination] = useState({ totalIssues: 0, totalPages: 1 });
 
   // Fetch API Handlers
   const fetchBooks = useCallback(async () => {
     setLoadingBooks(true);
     try {
-      const res = await api.get('/books/get-all-Books', { params: { limit: 100 } });
+      const res = await api.get('/books/get-all-Books', {
+        params: {
+          page: bookPage,
+          limit: bookLimit,
+          search: bookSearch
+        }
+      });
       const booksPayload = res.data?.data;
-      setBooks(Array.isArray(booksPayload?.books) ? booksPayload.books : Array.isArray(booksPayload) ? booksPayload : []);
+      if (booksPayload && Array.isArray(booksPayload.books)) {
+        setBooks(booksPayload.books);
+        setBookPagination(booksPayload.pagination || { totalBooks: booksPayload.books.length, totalPages: 1 });
+      } else {
+        setBooks(Array.isArray(booksPayload) ? booksPayload : []);
+      }
     } catch {
       toast.error('Failed to load books catalog');
     } finally {
       setLoadingBooks(false);
     }
-  }, []);
+  }, [bookPage, bookLimit, bookSearch]);
 
   const fetchIssues = useCallback(async () => {
     setLoadingIssues(true);
     try {
-      const res = await api.get('/books/all-issues');
-      setIssues(res.data?.data || []);
+      const res = await api.get('/books/all-issues', {
+        params: {
+          page: issuePage,
+          limit: issueLimit,
+          status: issueFilter
+        }
+      });
+      const issuesPayload = res.data?.data;
+      if (issuesPayload && Array.isArray(issuesPayload.issues)) {
+        setIssues(issuesPayload.issues);
+        setIssuePagination(issuesPayload.pagination || { totalIssues: issuesPayload.issues.length, totalPages: 1 });
+      } else {
+        setIssues(Array.isArray(issuesPayload) ? issuesPayload : []);
+      }
     } catch {
       toast.error('Failed to load circulation issue requests');
     } finally {
       setLoadingIssues(false);
     }
-  }, []);
+  }, [issuePage, issueLimit, issueFilter]);
 
   const fetchEvents = useCallback(async () => {
     try {
@@ -411,6 +411,11 @@ const AdminDashboard = () => {
             onSendReminders={handleSendOverdueReminders}
             sendingReminders={sendingReminders}
             onExportCSV={() => exportCirculationCSV(issues)}
+            page={issuePage}
+            setPage={setIssuePage}
+            limit={issueLimit}
+            setLimit={setIssueLimit}
+            pagination={issuePagination}
           />
         )}
 
@@ -425,6 +430,11 @@ const AdminDashboard = () => {
             onEditBook={handleOpenEditBook}
             onDeleteBook={handleDeleteBook}
             onExportCSV={() => exportInventoryCSV(books)}
+            page={bookPage}
+            setPage={setBookPage}
+            limit={bookLimit}
+            setLimit={setBookLimit}
+            pagination={bookPagination}
           />
         )}
 
