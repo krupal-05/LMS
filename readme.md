@@ -1,6 +1,20 @@
-# Library Management System (LMS)
+# 📚 Library Management System (LMS)
 
-> A robust, full-stack, role-based web application for managing library catalogs, automated book issue workflows, fine calculations, user memberships, and community events.
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Render-brightgreen?style=for-the-badge&logo=render&logoColor=white)](https://lms-frontend-25jw.onrender.com)
+[![Backend API](https://img.shields.io/badge/Backend_API-Live-blue?style=for-the-badge&logo=fastapi&logoColor=white)](https://lms-xcsu.onrender.com/api/v1)
+[![React](https://img.shields.io/badge/Frontend-React_19_+_Vite-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Backend-Node.js_+_Express_5-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB_Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![TailwindCSS](https://img.shields.io/badge/Styling-Tailwind_CSS_v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+
+> A robust, full-stack, role-based Library Management web application built with the MERN stack. Features automated book issue workflows, real-time inventory tracking, automatic overdue fine calculations (₹5/day), Cloudinary image uploads, secure JWT + HTTP-only cookie authentication, and community event announcements.
+
+---
+
+## 🔗 Live Deployments
+
+* 🌐 **Frontend Application**: [https://lms-frontend-25jw.onrender.com](https://lms-frontend-25jw.onrender.com)
+* ⚙️ **Backend API Base**: [https://lms-xcsu.onrender.com/api/v1](https://lms-xcsu.onrender.com/api/v1)
 
 ---
 
@@ -8,86 +22,87 @@
 
 - [Overview](#-overview)
 - [Key Features](#-key-features)
-  - [Student / Member Features](#student--member-features)
-  - [Admin Features](#admin-features)
+  - [Student / Member Portal](#student--member-portal)
+  - [Admin Dashboard & Control](#admin-dashboard--control)
 - [Tech Stack](#-tech-stack)
 - [System Architecture](#-system-architecture)
-- [Project Structure](#-project-structure)
-- [Authentication & Authorization](#-authentication--authorization)
-- [Book Management & Stock Tracking](#-book-management--stock-tracking)
-- [Book Issue & Return Workflow](#-book-issue--return-workflow)
-- [API Documentation](#-api-documentation)
-- [Database Models](#-database-models)
+- [Project Directory Structure](#-project-directory-structure)
+- [Authentication & Role Authorization](#-authentication--role-authorization)
+- [Book Management & Automated Inventory](#-book-management--automated-inventory)
+- [Issue & Return Lifecycle (With Fine Automation)](#-issue--return-lifecycle-with-fine-automation)
+- [REST API Reference](#-rest-api-reference)
+  - [User Endpoints (`/api/v1/users`)](#1-user-endpoints-apiv1users)
+  - [Book & Issue Endpoints (`/api/v1/books`)](#2-book--issue-endpoints-apiv1books)
+  - [Event Endpoints (`/api/v1/events`)](#3-event-endpoints-apiv1events)
+- [Database Models & Schemas](#-database-models--schemas)
 - [Environment Variables](#-environment-variables)
-- [Installation & Setup](#-installation--setup)
+- [Local Installation & Setup](#-local-installation--setup)
 - [Running the Project](#-running-the-project)
-- [API Testing](#-api-testing)
-- [Frontend Architecture](#-frontend-architecture)
 - [Deployment Guide](#-deployment-guide)
-- [Security Considerations](#-security-considerations)
-- [Future Improvements](#-future-improvements)
-- [Screenshots](#-screenshots)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Author](#-author)
+- [Security Features](#-security-features)
+- [Author & License](#-author--license)
 
 ---
 
 ## 🌟 Overview
 
-The **Library Management System (LMS)** is a modern web application designed to streamline library administration and improve the borrowing experience for members. 
+The **Library Management System (LMS)** simplifies library operations and digitizes the borrowing lifecycle for academic and public institutions.
 
-It eliminates manual register keeping by providing automated tracking of available book copies, real-time issue request processing, dynamic due-date calculation (+7 days upon approval), automated late fine calculation (₹5/day for overdue returns), fine waiver/payment management, member avatar uploads, and event announcements.
+### Why this project?
+- **Zero Manual Logs**: Eliminates manual register entry and paper receipts.
+- **Automated Book Stock**: Inventory copies decrement upon issue approval and increment automatically upon return.
+- **Smart Fine Engine**: Automatically calculates overdue charges based on return timestamps and allows fine settlement or administrative waivers.
+- **Modern User Experience**: Instant search, category filters, responsive navigation, and animated toast feedback.
 
 ---
 
 ## ✨ Key Features
 
-### Student / Member Features
-* **Account Registration & Authentication**: Create a member account with custom profile picture upload. Secure login using JWT tokens via HTTP-only cookies.
-* **Catalog Exploration & Search**: Browse all library books with real-time text search (title, author, category, ISBN) and category filtering.
-* **Real-time Statistics**: View total catalog books, active library members, active borrows, and completed returns.
-* **Book Issue Request**: Submit single-click request to issue a book. Prevents duplicate requests for already active/pending issues.
-* **Personal Issued Books Dashboard ("My Issues")**: Track pending approval status, active borrowed books, due dates, return dates, and overdue fine status.
-* **Fine Payment**: Settle overdue fines directly from the student dashboard.
-* **Profile Management**: Update member contact details, update avatar, and change password securely.
-* **Library Events**: View upcoming workshops, seminars, and library events.
+### Student / Member Portal
+- 👤 **Account & Profile**: Member registration with custom avatar upload via Cloudinary, login, and secure profile/password updates.
+- 🔍 **Catalog Exploration**: Real-time search across title, author, category, and ISBN with instant filtering.
+- 📖 **Single-Click Book Requests**: Request books directly with duplicate request prevention.
+- 📊 **My Issues Dashboard**: Real-time status tracking for requested, approved, returned, or rejected books.
+- ⏰ **Due Date & Fine Alerts**: Clear indicators for due dates (7-day borrowing window) and automated overdue fine alerts.
+- 💳 **Fine Settlement**: Built-in flow to pay overdue fines directly.
+- 📅 **Library Events**: View upcoming workshops, seminars, and library notices.
 
-### Admin Features
-* **Centralized Admin Dashboard**: Overview of system activity, pending issue requests, return processing, catalog management, and event creation.
-* **Book Catalog CRUD**: Add new books with cover image uploads stored on Cloudinary, update book details/stock, and delete books from the system.
-* **Issue Request Moderation**: Review and Approve or Reject incoming student book requests.
-* **Return Processing & Fine Automation**: Mark returned books, automatically restore available copy inventory count, and auto-calculate late fees if returned past the due date.
-* **Fine Administration**: Waive late fines for students or monitor payment statuses.
-* **System-wide Issue Monitoring**: Inspect all global issues with status filtering (`pending`, `approved`, `returned`, `rejected`) and search by student name/email or book title.
-* **Event Management**: Publish new events and remove expired events.
+### Admin Dashboard & Control
+- 📈 **Library Metrics**: Real-time aggregate counters for total catalog books, registered members, active borrows, and completed returns.
+- 📚 **Full Book Catalog CRUD**: Add new books with cover images, edit details/copies, and delete entries.
+- 🛡️ **Request Moderation**: Approve or reject pending student book issue requests.
+- 🔄 **Return Processing**: Mark returned books with automatic inventory restocking and instant fine generation if overdue.
+- 💰 **Fine Management**: Waive fines for students or track completed payments.
+- 📋 **Global Issues Inspector**: Filter and search through all transactions by status (`pending`, `approved`, `returned`, `rejected`).
+- 📢 **Event Administration**: Post and remove institution events and announcements.
 
 ---
 
 ## 🧪 Tech Stack
 
 ### Frontend
-* **Core Library**: [React 19](https://react.dev/)
-* **Build Tool**: [Vite](https://vitejs.dev/)
-* **Routing**: [React Router DOM v7](https://reactrouter.com/)
-* **HTTP Client**: [Axios](https://axios-http.com/)
-* **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-* **Animations**: [Framer Motion](https://www.framer.com/motion/)
-* **Icons**: [React Icons](https://react-icons.github.io/react-icons/)
-* **Notifications**: [React Hot Toast](https://react-hot-toast.com/)
+- **Framework**: [React 19](https://react.dev/)
+- **Build Tool**: [Vite](https://vitejs.dev/)
+- **Routing**: [React Router DOM v7](https://reactrouter.com/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Icons**: [React Icons](https://react-icons.github.io/react-icons/)
+- **HTTP Client**: [Axios](https://axios-http.com/) (with cross-origin credentials)
+- **Notifications**: [React Hot Toast](https://react-hot-toast.com/)
 
 ### Backend
-* **Runtime**: [Node.js](https://nodejs.org/)
-* **Framework**: [Express.js v5](https://expressjs.com/)
-* **Database Driver**: [Mongoose v9](https://mongoosejs.com/)
-* **Authentication**: [JSON Web Tokens (JWT)](https://jwt.io/), [bcrypt](https://github.com/kelektiv/node.bcrypt.js)
-* **Cookies**: `cookie-parser`
-* **File Handling**: [Multer](https://github.com/expressjs/multer)
-* **Cloud Storage**: [Cloudinary SDK](https://cloudinary.com/)
-* **Utilities**: `dotenv`, `cors`
+- **Runtime**: [Node.js](https://nodejs.org/) (ES Modules)
+- **Framework**: [Express.js v5](https://expressjs.com/)
+- **Database Driver**: [Mongoose v9](https://mongoosejs.com/)
+- **Authentication**: [JSON Web Tokens (JWT)](https://jwt.io/) & [bcrypt](https://github.com/kelektiv/node.bcrypt.js)
+- **Session Security**: `cookie-parser` (HTTP-only cookies)
+- **File Uploads**: [Multer](https://github.com/expressjs/multer) (temp disk buffer) + [Cloudinary](https://cloudinary.com/) (cloud CDN)
+- **CORS**: Configured with dynamic origin whitelist
 
-### Database
-* **Database Engine**: [MongoDB](https://www.mongodb.com/) / MongoDB Atlas
+### Database & Cloud
+- **Database**: [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+- **Cloud Storage**: [Cloudinary](https://cloudinary.com/)
+- **Hosting**: [Render](https://render.com/)
 
 ---
 
@@ -96,220 +111,216 @@ It eliminates manual register keeping by providing automated tracking of availab
 ```mermaid
 graph TD
     subgraph Client Layer
-        A[React / Vite Frontend] -->|Axios with Credentials| B[Express REST API]
+        A["React 19 + Vite Frontend<br/>(Render Deployed)"] -->|HTTPS / Axios + withCredentials| B["Express 5 REST API<br/>(Render Deployed)"]
     end
 
-    subgraph Authentication & Security
-        B -->|Verify JWT Cookie/Header| C[auth.middleware.js]
-        C -->|Check Role === admin| D[admin.middleware.js]
+    subgraph Security & Middlewares
+        B -->|Check JWT Cookie / Header| C["verifyeJWT Middleware"]
+        C -->|Validate role === 'admin'| D["verifyAdmin Middleware"]
     end
 
-    subgraph Data & Storage Layer
-        B -->|Mongoose Queries| E[(MongoDB Database)]
-        B -->|Multer Temp Storage| F[Local Disk /public/temp]
-        F -->|Upload Cloudinary SDK| G[Cloudinary Cloud Storage]
-        G -->|Return Image URL & public_id| B
+    subgraph Storage & Cloud Layer
+        B -->|Mongoose ORM| E[("MongoDB Atlas<br/>Database")]
+        B -->|Multer Temp /public/temp| F["Local Storage Buffer"]
+        F -->|Cloudinary SDK Upload| G["Cloudinary Cloud CDN"]
+        G -->|Return CDN URL & public_id| B
     end
 ```
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Directory Structure
 
 ```text
 LMS/
 ├── backend/
 │   ├── public/
-│   │   └── temp/                   # Temporary file storage for Multer uploads
+│   │   └── temp/                      # Temporary buffer for Multer file uploads
 │   ├── src/
 │   │   ├── controllers/
-│   │   │   ├── book.controller.js  # Book CRUD & Library Stats logic
-│   │   │   ├── event.controller.js # Event creation, fetch & deletion
-│   │   │   ├── issebook.controller.js # Issue requests, approvals, returns, fine logic
-│   │   │   └── user.controller.js # Auth, profile management, JWT generation
+│   │   │   ├── book.controller.js     # Book CRUD & aggregate library stats
+│   │   │   ├── event.controller.js    # Event announcements logic
+│   │   │   ├── issebook.controller.js # Issue requests, approvals, returns, fine engine
+│   │   │   └── user.controller.js    # Auth, avatar update, profile & token renewal
 │   │   ├── db/
-│   │   │   └── ConnectDB.js        # MongoDB connection setup
+│   │   │   └── ConnectDB.js           # Mongoose MongoDB connection handler
 │   │   ├── middlewares/
-│   │   │   ├── admin.middleware.js # Admin role verification
-│   │   │   ├── auth.middleware.js  # JWT verification middleware
-│   │   │   └── multer.middleware.js# File upload middleware (disk storage)
+│   │   │   ├── admin.middleware.js    # Admin role verification guard
+│   │   │   ├── auth.middleware.js     # JWT token verification middleware
+│   │   │   └── multer.middleware.js   # Multipart form disk storage handler
 │   │   ├── model/
-│   │   │   ├── Announcement.model.js
-│   │   │   ├── Book.model.js       # Book schema with text indexing
-│   │   │   ├── Event.model.js      # Library event schema
-│   │   │   ├── Issue.model.js      # IssueBooks schema (user, book, dates, status, fine)
-│   │   │   └── User.Model.js       # User schema (password hashing, JWT helper methods)
+│   │   │   ├── Announcement.model.js  # Announcement schema
+│   │   │   ├── Book.model.js          # Book catalog schema & indexes
+│   │   │   ├── Event.model.js         # Library events schema
+│   │   │   ├── Issue.model.js         # Book issue & fine tracking schema
+│   │   │   └── User.Model.js          # User credentials & role schema
 │   │   ├── routes/
-│   │   │   ├── book.route.js       # Book & Issue API endpoints
-│   │   │   ├── event.route.js      # Event API endpoints
-│   │   │   └── user.route.js       # User auth & profile endpoints
+│   │   │   ├── book.route.js          # /api/v1/books router
+│   │   │   ├── event.route.js         # /api/v1/events router
+│   │   │   └── user.route.js          # /api/v1/users router
 │   │   ├── services/
-│   │   │   └── cloudinary.service.js # Cloudinary upload & local cleanup service
-│   │   └── utils/
-│   │       ├── ApiError.js         # Custom API Error class
-│   │       ├── ApiResponse.js      # Custom API Response formatter
-│   │       └── asyncHandler.js     # Async wrapper for route handlers
-│   ├── .env                        # Backend environment configuration
-│   ├── App.js                      # Express app setup, CORS, CookieParser, global errorHandler
-│   ├── Index.js                    # Server startup script
+│   │   │   └── cloudinary.service.js  # Cloudinary file upload & auto-cleanup
+│   │   ├── utils/
+│   │   │   ├── ApiError.js            # Standardized API error response
+│   │   │   ├── ApiResponse.js         # Standardized API payload response
+│   │   │   └── asyncHandler.js        # Async try/catch controller wrapper
+│   │   └── Constants.js               # Global constants
+│   ├── .env                           # Backend environment config
+│   ├── App.js                         # Express configuration, CORS, cookies, route bindings
+│   ├── Index.js                       # Server entry point & DB bootstrap
 │   └── package.json
 │
 └── frontend/
     ├── public/
     ├── src/
-    │   ├── assets/
+    │   ├── assets/                    # Static images, icons, illustrations
     │   ├── components/
-    │   │   ├── admin/              # Admin dashboard components
-    │   │   ├── cards/              # Card components
-    │   │   ├── common/             # Common UI components
-    │   │   ├── home/               # Landing page sections
-    │   │   ├── student/            # Student dashboard components
-    │   │   └── ui/                 # Reusable UI elements (Buttons, Inputs, Modals)
+    │   │   ├── admin/                 # Admin modal, issue rows & statistics
+    │   │   ├── cards/                 # Reusable book cards & event cards
+    │   │   ├── common/                # Layout, header, footer & loader components
+    │   │   ├── home/                  # Landing page hero, stats & preview sections
+    │   │   ├── student/               # Student issue table & fine modal components
+    │   │   └── ui/                    # Buttons, Inputs, Dialogs & Dropdowns
     │   ├── context/
-    │   │   ├── AuthContext.jsx     # User authentication state & methods
-    │   │   └── ThemeContext.jsx    # Theme context provider
+    │   │   ├── AuthContext.jsx        # Authentication state, login/logout handlers
+    │   │   └── ThemeContext.jsx       # Theme state provider
     │   ├── pages/
-    │   │   ├── AddBook.jsx         # Add new book page
-    │   │   ├── AdminDashboard.jsx  # Admin panel page
-    │   │   ├── Books.jsx           # Books catalog listing
-    │   │   ├── Home.jsx            # Landing page
-    │   │   ├── Login.jsx           # User authentication login
-    │   │   ├── NotFound.jsx        # 404 page
-    │   │   ├── Profile.jsx         # User profile settings page
-    │   │   ├── Register.jsx        # User registration page
-    │   │   └── StudentDashboard.jsx# Student dashboard page
+    │   │   ├── AddBook.jsx            # Book creation view (Admin)
+    │   │   ├── AdminDashboard.jsx     # Comprehensive admin management panel
+    │   │   ├── Books.jsx              # Public catalog listing with search & filters
+    │   │   ├── Home.jsx               # Landing page with stats & upcoming events
+    │   │   ├── Login.jsx              # User & admin sign-in page
+    │   │   ├── NotFound.jsx           # 404 error page
+    │   │   ├── Profile.jsx            # User profile, avatar change & password change
+    │   │   ├── Register.jsx           # User registration with avatar upload
+    │   │   └── StudentDashboard.jsx   # Student personal issues & history panel
     │   ├── services/
-    │   │   └── api.js              # Axios instance configuration (withCredentials: true)
-    │   ├── App.jsx                 # Routes declaration
-    │   ├── main.jsx                # Entry point
-    │   └── index.css               # Tailwind CSS imports and global styles
+    │   │   └── api.js                 # Configured Axios client with dynamic environment URLs
+    │   ├── App.jsx                    # Route switch & protected route tree
+    │   ├── main.jsx                   # React root entry point
+    │   └── index.css                  # Tailwind CSS setup & global styles
+    ├── .env.development              # Development environment variables
+    ├── .env.production               # Production environment variables
     ├── vite.config.js
     └── package.json
 ```
 
 ---
 
-## 🔐 Authentication & Authorization
+## 🔐 Authentication & Role Authorization
 
-Authentication is handled via **JSON Web Tokens (JWT)** and **HTTP-only Cookies**:
-
-1. **Registration**: 
-   - Accepts user details (`firstName`, `lastName`, `email`, `contact`, `password`) and an avatar image.
-   - Passwords are automatically hashed using `bcrypt` (10 rounds) before saving to MongoDB via Mongoose pre-save middleware.
-   - Avatar is uploaded to Cloudinary, and the URL is stored in the user profile.
-
-2. **Login & Tokens**:
-   - Verifies credentials using `bcrypt.compare()`.
-   - Generates two tokens:
-     - **Access Token**: Short-lived payload containing user ID, email, and name (`process.env.ACCESS_SECRET_TOKEN`).
-     - **Refresh Token**: Long-lived payload (`process.env.REFRESH_SECRET_TOKEN`) saved to the database record.
-   - Both tokens are sent to the client via `httpOnly`, `sameSite` secured cookies (`accessToken`, `reFreshToken`).
-
-3. **Authorization Middlewares**:
-   - `verifyeJWT`: Checks `req.cookies.accessToken` or `Authorization: Bearer <token>` header, verifies JWT signature, attaches user to `req.user`.
-   - `verifyAdmin`: Enforces that `req.user.role === 'admin'`. Returns `403 Forbidden` if unauthorized.
+1. **Password Security**: Passwords are automatically hashed with `bcrypt` (10 salt rounds) prior to database insertion.
+2. **Dual-Token System**:
+   - **Access Token**: Short-expiry JWT containing user identity (`id`, `email`, `role`).
+   - **Refresh Token**: Stored securely in MongoDB to allow seamless token refreshment without logging out.
+3. **HTTP-only Cookies**: Both tokens are dispatched via `httpOnly`, `sameSite` secure cookies to mitigate Cross-Site Scripting (XSS).
+4. **Role-Based Access Control (RBAC)**:
+   - `verifyeJWT`: Authenticates token from cookie or `Authorization: Bearer <token>` header.
+   - `verifyAdmin`: Confirms `req.user.role === 'admin'`. Denies non-admin access with `403 Forbidden`.
 
 ---
 
-## 📚 Book Management & Stock Tracking
+## 📚 Book Management & Automated Inventory
 
-* **Book Schema**: Includes `title`, `description`, `category`, `author`, `copies`, `availableCopies`, `isbn`, and `cover` (`url`, `public_id`).
-* **Search & Indexing**: Compound text indexes are created on `title`, `author`, and `isbn` for optimized database queries.
-* **Automatic Stock Adjustment**:
-  - Initial creation sets `availableCopies = copies`.
-  - When an issue request is **approved**, `availableCopies` decrements by 1.
-  - When an issued book is **returned**, `availableCopies` increments by 1.
+- **Dynamic Availability**:
+  $$\text{availableCopies} \le \text{copies}$$
+- **When an issue is APPROVED**: `availableCopies` decrements by 1.
+- **When an issue is RETURNED**: `availableCopies` increments by 1.
+- **Text Search Indexing**: MongoDB compound text index on `{ title, author, isbn }` for ultra-fast full-text searches.
 
 ---
 
-## 🔄 Book Issue & Return Workflow
+## 🔄 Issue & Return Lifecycle (With Fine Automation)
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Pending: Student Requests Book
+    [*] --> Pending: Student Submits Request
     Pending --> Rejected: Admin Rejects Request
-    Pending --> Approved: Admin Approves Request (Due Date set to +7 days, copies - 1)
-    Approved --> Returned: Book Returned by Student (copies + 1)
+    Pending --> Approved: Admin Approves Request (Due Date = +7 Days, Stock -1)
+    
+    Approved --> Returned: Student Returns Book (Stock +1)
     
     state Returned {
         [*] --> CheckDueDate
-        CheckDueDate --> NoFine: Return <= Due Date
-        CheckDueDate --> CalculateFine: Return > Due Date (₹5/day)
-        CalculateFine --> Unpaid: fineStatus = "unpaid"
-        Unpaid --> Paid: Student Pays Fine
-        Unpaid --> Waived: Admin Waives Fine
+        CheckDueDate --> DueMet: returnDate <= dueDate (Fine = 0)
+        CheckDueDate --> Overdue: returnDate > dueDate (Fine = ₹5 per day)
+        
+        DueMet --> Completed: fineStatus = "paid"
+        Overdue --> Unpaid: fineStatus = "unpaid"
+        
+        Unpaid --> Paid: Student Pays Fine (/pay-fine)
+        Unpaid --> Waived: Admin Waives Fine (/waive-fine)
+        Paid --> Completed
+        Waived --> Completed
     }
 ```
 
-### Overdue Fine Logic:
-- **Default Borrow Duration**: 7 Days from approval date.
-- **Fine Calculation Formula**: If `returnDate > dueDate`:
-  $$\text{Fine Amount} = \text{ceil}\left(\frac{\text{returnDate} - \text{dueDate}}{86400 \times 1000}\right) \times 5 \text{ (₹)}$$
-- **Fine Status**: Set to `"unpaid"` if fine > 0, otherwise `"paid"`.
-- **Administrative Control**: Admins can waive fines (`waive-fine`) or students can pay fines directly (`pay-fine`).
+### Overdue Fine Formula:
+$$\text{Days Overdue} = \left\lceil \frac{\text{returnDate} - \text{dueDate}}{1000 \times 60 \times 60 \times 24} \right\rceil$$
+$$\text{Fine Amount (₹)} = \max(0, \text{Days Overdue} \times 5)$$
 
 ---
 
-## 📡 API Documentation
+## 📡 REST API Reference
 
 ### Base URL: `/api/v1`
 
-#### User Endpoints (`/users`)
+### 1. User Endpoints (`/api/v1/users`)
 | Method | Endpoint | Description | Auth Required | Role |
 | :--- | :--- | :--- | :---: | :---: |
 | `POST` | `/users/register` | Register a new member (with avatar) | No | Public |
-| `POST` | `/users/login` | Authenticate user & issue tokens/cookies | No | Public |
-| `POST` | `/users/logout` | Revoke session & clear cookies | Yes | Any |
+| `POST` | `/users/login` | Login user & set auth cookies | No | Public |
+| `POST` | `/users/logout` | Invalidate tokens & clear cookies | Yes | Any |
 | `POST` | `/users/refresh-token` | Renew access token via refresh token | No | Public |
-| `GET` | `/users/me` | Fetch current logged-in user profile | Yes | Any |
-| `PATCH` | `/users/change-password` | Update account password | Yes | Any |
-| `PATCH` | `/users/update-profile` | Update user name & contact | Yes | Any |
-| `PATCH` | `/users/avtar` | Update user profile picture | Yes | Any |
+| `GET` | `/users/me` | Fetch logged-in user profile | Yes | Any |
+| `PATCH` | `/users/update-profile` | Update account details (name, contact) | Yes | Any |
+| `PATCH` | `/users/change-password` | Change user password | Yes | Any |
+| `PATCH` | `/users/avtar` | Update profile picture (Cloudinary) | Yes | Any |
 
-#### Book & Issue Endpoints (`/books`)
+### 2. Book & Issue Endpoints (`/api/v1/books`)
 | Method | Endpoint | Description | Auth Required | Role |
 | :--- | :--- | :--- | :---: | :---: |
-| `GET` | `/books/stats` | Get aggregate library metrics | No | Public |
-| `GET` | `/books/get-all-Books` | List books (supports search, category filter, pagination) | No | Public |
-| `GET` | `/books/get-book/:id` | Fetch specific book by ID | No | Public |
-| `POST` | `/books/add-book` | Create new book record (with cover image) | Yes | **Admin** |
-| `PATCH` | `/books/update-book/:id` | Edit book details or cover image | Yes | **Admin** |
-| `DELETE` | `/books/delete-book/:id` | Remove a book from catalog | Yes | **Admin** |
-| `POST` | `/books/request/:id` | Submit a request to issue a book | Yes | Student |
-| `POST` | `/books/approve/:id` | Approve pending book request | Yes | **Admin** |
-| `POST` | `/books/reject/:id` | Reject pending book request | Yes | **Admin** |
-| `POST` | `/books/return/:id` | Process returned book & calculate fine | Yes | **Admin** |
-| `POST` | `/books/pay-fine/:id` | Pay outstanding fine for an issue record | Yes | Any |
+| `GET` | `/books/stats` | Get aggregate library metrics (books, users, issues) | No | Public |
+| `GET` | `/books/get-all-Books` | List books (search, filter, pagination) | No | Public |
+| `GET` | `/books/get-book/:id` | Fetch details of a specific book | No | Public |
+| `POST` | `/books/add-book` | Add a new book (with cover image) | Yes | **Admin** |
+| `PATCH` | `/books/update-book/:id` | Update book information or cover | Yes | **Admin** |
+| `DELETE` | `/books/delete-book/:id` | Remove a book from the catalog | Yes | **Admin** |
+| `POST` | `/books/request/:id` | Submit a book borrowing request | Yes | Student |
+| `POST` | `/books/approve/:id` | Approve student issue request | Yes | **Admin** |
+| `POST` | `/books/reject/:id` | Reject student issue request | Yes | **Admin** |
+| `POST` | `/books/return/:id` | Mark book returned & compute fine | Yes | **Admin** |
+| `POST` | `/books/pay-fine/:id` | Pay overdue fine for an issue record | Yes | Any |
 | `POST` | `/books/waive-fine/:id` | Waive fine for an issue record | Yes | **Admin** |
-| `GET` | `/books/my-issues` | List current user's requested/borrowed books | Yes | Student |
-| `GET` | `/books/all-issues` | System-wide view of all issues | Yes | **Admin** |
+| `GET` | `/books/my-issues` | Get logged-in student's issue history | Yes | Student |
+| `GET` | `/books/all-issues` | Fetch all issues across library | Yes | **Admin** |
 
-#### Event Endpoints (`/events`)
+### 3. Event Endpoints (`/api/v1/events`)
 | Method | Endpoint | Description | Auth Required | Role |
 | :--- | :--- | :--- | :---: | :---: |
-| `GET` | `/events` | List all library events & announcements | No | Public |
+| `GET` | `/events` | Get all upcoming library events | No | Public |
 | `POST` | `/events/create` | Publish a new library event | Yes | **Admin** |
 | `DELETE` | `/events/delete/:id` | Delete an existing event | Yes | **Admin** |
 
 ---
 
-## 🗄️ Database Models
+## 🗄️ Database Models & Schemas
 
-### 1. User Model (`User.Model.js`)
+### User Schema (`User.Model.js`)
 ```javascript
 {
-  firstName: { type: String, required: true, trim: true },
-  lastName:  { type: String, required: true, trim: true },
-  email:     { type: String, required: true, unique: true, trim: true, lowercase: true },
-  contact:   { type: Number, required: true },
-  password:  { type: String, required: true },
-  avatar:    { type: String, default: "" },
-  role:      { type: String, enum: ["student", "admin"], default: "student" },
+  firstName:    { type: String, required: true, trim: true },
+  lastName:     { type: String, required: true, trim: true },
+  email:        { type: String, required: true, unique: true, trim: true, lowercase: true },
+  contact:      { type: Number, required: true },
+  password:     { type: String, required: true },
+  avatar:       { type: String, default: "" },
+  role:         { type: String, enum: ["student", "admin"], default: "student" },
   reFreshToken: { type: String }
 } // timestamps: true
 ```
 
-### 2. Book Model (`Book.model.js`)
+### Book Schema (`Book.model.js`)
 ```javascript
 {
   title:           { type: String, required: true, trim: true },
@@ -321,10 +332,10 @@ stateDiagram-v2
   availableCopies: { type: Number, required: true },
   isbn:            { type: String, required: true, unique: true, trim: true }
 } // timestamps: true
-// Indexes: { category: 1 }, { createdAt: -1 }, text index on { title, author, isbn }
+// Text indexes on: title, author, isbn
 ```
 
-### 3. Issue Model (`Issue.model.js` -> Collection: `issueBooks`)
+### Issue Schema (`Issue.model.js`)
 ```javascript
 {
   user:       { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -339,7 +350,7 @@ stateDiagram-v2
 } // timestamps: true
 ```
 
-### 4. Event Model (`Event.model.js`)
+### Event Schema (`Event.model.js`)
 ```javascript
 {
   title:       { type: String, required: true, trim: true },
@@ -358,190 +369,119 @@ stateDiagram-v2
 ## 🔑 Environment Variables
 
 ### Backend Configuration (`backend/.env`)
-Create a `.env` file in the `backend/` directory:
-
 ```env
-# Server Configuration
+# Server
 PORT=8000
 NODE_ENV=development
+FRONTEND_URL=https://lms-frontend-25jw.onrender.com
 
-# Database Configuration
+# Database
 DB_NAME=LMS
 db_url=mongodb+srv://<username>:<password>@cluster.mongodb.net/?appName=LMS
 
-# JWT Configuration
-ACCESS_SECRET_TOKEN=your_jwt_access_secret_key_here
+# JWT Secrets & Expirations
+ACCESS_SECRET_TOKEN=your_jwt_access_secret_key
 ACCESS_TOKEN_EXPIRY=1d
-REFRESH_SECRET_TOKEN=your_jwt_refresh_secret_key_here
+REFRESH_SECRET_TOKEN=your_jwt_refresh_secret_key
 REFRESH_TOKEN_EXPIRY=10d
 
-# Cloudinary Configuration
+# Cloudinary Storage
 CLOULDINARY_NAME=your_cloudinary_cloud_name
 CLOULDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_SECRATE=your_cloudinary_api_secret
 ```
 
-### Frontend Configuration (`frontend/.env`)
-Create a `.env` file in the `frontend/` directory (optional for custom host):
-
-```env
-VITE_API_URL=http://localhost:8000/api/v1
-```
+### Frontend Configuration (`frontend/.env.development` & `.env.production`)
+- **Development** (`frontend/.env.development`):
+  ```env
+  VITE_API_URL=http://localhost:8000/api/v1
+  ```
+- **Production** (`frontend/.env.production`):
+  ```env
+  VITE_API_URL=https://lms-xcsu.onrender.com/api/v1
+  ```
 
 ---
 
-## ⚙️ Installation & Setup
+## ⚙️ Local Installation & Setup
 
 ### Prerequisites
-* [Node.js](https://nodejs.org/) (v18 or higher recommended)
-* [MongoDB](https://www.mongodb.com/) (Local instance or MongoDB Atlas URI)
-* [Cloudinary Account](https://cloudinary.com/) (For image upload handling)
+- [Node.js](https://nodejs.org/) (v18+)
+- [MongoDB](https://www.mongodb.com/) (Local or Atlas URI)
+- [Cloudinary Account](https://cloudinary.com/)
 
-### Step 1: Clone Repository
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/LMS.git
+git clone https://github.com/krupal-05/LMS.git
 cd LMS
 ```
 
-### Step 2: Install Backend Dependencies
+### 2. Setup Backend
 ```bash
 cd backend
 npm install
+# Create .env and configure variables
 ```
 
-### Step 3: Install Frontend Dependencies
+### 3. Setup Frontend
 ```bash
 cd ../frontend
 npm install
+# Configure .env.development or .env.production
 ```
 
 ---
 
 ## 🚀 Running the Project
 
-### Start Backend Development Server
-From the `backend/` folder:
+### Run Backend (Dev Mode)
 ```bash
+cd backend
 npm run dev
+# Server running at http://localhost:8000
 ```
-* The backend server will run on `http://localhost:8000`.
 
-### Start Frontend Development Server
-From the `frontend/` folder:
+### Run Frontend (Dev Mode)
 ```bash
+cd frontend
 npm run dev
+# Vite client running at http://localhost:5173
 ```
-* The React application will run on `http://localhost:5173`.
-
----
-
-## 🧪 API Testing
-
-You can test all endpoints using [Postman](https://www.postman.com/) or Insomnia:
-
-1. **Authentication Flow**:
-   - Send `POST /api/v1/users/register` with `multipart/form-data` including text fields and an `avatar` image file.
-   - Send `POST /api/v1/users/login` with JSON payload `{ "email": "admin@example.com", "password": "yourpassword" }`.
-   - Ensure Postman cookie jar is enabled to automatically capture `accessToken` and `reFreshToken`.
-
-2. **Protected Routes**:
-   - Subsequent requests to protected routes will automatically transmit the session cookie or you can provide the token as `Bearer <accessToken>` in the `Authorization` header.
-
----
-
-## 🎨 Frontend Architecture
-
-The frontend is built with React 19 and Vite using functional components and React Context:
-
-* **State Management (`AuthContext.jsx`)**: Manages authentication status, user state persisted in `localStorage`, login action with role-mismatch prevention, registration wrapper, and logout handler.
-* **Routing (`App.jsx`)**: Configured with `react-router-dom` v7 providing paths for Home (`/`), Login (`/login`), Register (`/register`), Books (`/books`), Add Book (`/add-book`), Profile (`/profile`), Student Dashboard (`/student/dashboard`), and Admin Dashboard (`/admin/dashboard`).
-* **API Layer (`services/api.js`)**: Configured Axios instance with dynamic base URL calculation and `withCredentials: true` enabled for cross-origin cookie processing.
-* **UI & Styling**: Styled using Tailwind CSS v4 and animated using Framer Motion with toast alerts via React Hot Toast.
 
 ---
 
 ## 🌐 Deployment Guide
 
-### Database (MongoDB Atlas)
-1. Create a MongoDB Atlas Cluster and obtain the connection string (`mongodb+srv://...`).
-2. Add your server's IP address to the Network Access whitelist.
+### Deploying on Render
 
-### Cloud Storage (Cloudinary)
-1. Sign up for a Cloudinary account.
-2. Copy your Cloud Name, API Key, and API Secret into production environment variables.
+#### 1. Backend Service (Web Service)
+- **Root Directory**: `backend`
+- **Build Command**: `npm install`
+- **Start Command**: `node Index.js`
+- **Environment Variables**: Add all keys from `backend/.env` (e.g. `db_url`, `ACCESS_SECRET_TOKEN`, `CLOULDINARY_NAME`, `FRONTEND_URL`).
 
-### Backend Deployment (Render / Railway / Vercel Serverless)
-1. Deploy the `backend/` directory.
-2. Set Environment Variables (`db_url`, `ACCESS_SECRET_TOKEN`, `REFRESH_SECRET_TOKEN`, `CLOULDINARY_NAME`, etc.).
-3. Set Build Command: `npm install` and Start Command: `node Index.js`.
-
-### Frontend Deployment (Vercel / Netlify)
-1. Deploy the `frontend/` directory.
-2. Set Environment Variable `VITE_API_URL` pointing to your deployed backend URL (e.g., `https://your-api.onrender.com/api/v1`).
-3. Set Build Command: `npm run build` and Output Directory: `dist`.
+#### 2. Frontend Service (Static Site)
+- **Root Directory**: `frontend`
+- **Build Command**: `npm run build`
+- **Publish Directory**: `dist`
+- **Environment Variables**: `VITE_API_URL=https://lms-xcsu.onrender.com/api/v1`
 
 ---
 
-## 🔒 Security Considerations
+## 🔒 Security Features
 
-* **Password Hashing**: Direct plain-text password storage is strictly avoided. All passwords undergo salt hashing (10 rounds of `bcrypt`).
-* **Cookie Protection**: Authentication cookies use `httpOnly: true` (preventing XSS access) and `sameSite` configurations.
-* **Role Enforcement**: Strict middleware checks prevent unauthorized users from escalating privileges to administrative actions.
-* **Input Scrubbing & Sanitization**: Trimmed input fields and Mongoose schema constraints prevent invalid database insertions.
-* **Temporary Storage Cleanup**: Files uploaded locally via Multer are unlinked immediately after upload to Cloudinary or upon upload failure.
-
----
-
-## 🔮 Future Improvements
-
-While the current system covers core LMS requirements, planned future extensions include:
-
-- 📧 **Automated Email Notifications**: Sending automated email alerts via Nodemailer for due-date reminders and fine generation.
-- ⏰ **Scheduled Overdue Cron Jobs**: Automated background cron jobs to check and recalculate daily fines for overdue items without requiring manual return triggers.
-- 📷 **Physical Barcode / QR Code Scanner Sync**: Hardware scanner support for instant ISBN scanning during library checkout.
-- 📊 **Analytics Export**: PDF and CSV export capabilities for administrative monthly circulation reports.
-- 👥 **Multi-tier Role Management**: Introducing Librarian, Faculty, and Student tier distinctions with customized borrowing quotas.
+- 🛡️ **Hashed Credentials**: Passwords salted and hashed with `bcrypt`.
+- 🍪 **HTTP-only Cookie Session**: Protects JWT tokens from client-side script inspection.
+- 🚦 **RBAC Protection**: Unauthorized privilege escalation prevented at route-level.
+- 🧹 **Automatic Cleanup**: Local Multer file buffers automatically removed after Cloudinary dispatch.
+- 🌐 **Restricted CORS Policy**: Configured to only permit trusted frontend origins and local development hosts.
 
 ---
 
-## 🖼️ Screenshots
-
-### Login
-<!-- Add Login Screenshot Here -->
-
-### Home / Landing Page
-<!-- Add Home Screenshot Here -->
-
-### Catalog & Book Management
-<!-- Add Book Management Screenshot Here -->
-
-### Issue Requests & Return Moderation
-<!-- Add Issue Management Screenshot Here -->
-
----
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
-
-1. Fork the Project.
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the Branch (`git checkout -b feature/AmazingFeature`).
-5. Open a Pull Request.
-
----
-
-## 📜 License
-
-This project is licensed under the **ISC License**.
-
----
-
-## 👤 Author
+## 👤 Author & License
 
 **Krupal**
-* GitHub: [@Krupal-05](https://github.com/krupal-05)
+- GitHub: [@krupal-05](https://github.com/krupal-05)
+- Project Repository: [https://github.com/krupal-05/LMS](https://github.com/krupal-05/LMS)
 
----
-*Generated for the Library Management System (LMS) codebase.*
+Distributed under the **ISC License**.
