@@ -15,12 +15,13 @@ app.use(cors({
     if (!origin) return callback(null, true);
 
     const isLocal = origin.startsWith("http://localhost:") ||
-      origin.startsWith("http://127.0.0.1:")
+      origin.startsWith("http://127.0.0.1:");
+    const isAllowedFrontend = process.env.FRONTEND_URL && origin.startsWith(process.env.FRONTEND_URL.replace(/\/$/, ""));
 
-    if (isLocal) {
+    if (isLocal || isAllowedFrontend || origin.endsWith(".onrender.com") || origin.endsWith(".vercel.app")) {
       callback(null, true);
     } else {
-      callback(null, false); // Do not throw an error, just block
+      callback(null, false);
     }
   },
   credentials: true,
