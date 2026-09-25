@@ -15,10 +15,7 @@ app.use(cors({
     if (!origin) return callback(null, true);
 
     const isLocal = origin.startsWith("http://localhost:") ||
-      origin.startsWith("http://127.0.0.1:") ||
-      /^http:\/\/192\.168\.\d+\.\d+(:\d+)?$/.test(origin) ||
-      /^http:\/\/10\.\d+\.\d+\.\d+(:\d+)?$/.test(origin) ||
-      /^http:\/\/172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+(:\d+)?$/.test(origin);
+      origin.startsWith("http://127.0.0.1:")
 
     if (isLocal) {
       callback(null, true);

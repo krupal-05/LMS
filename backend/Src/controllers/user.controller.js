@@ -130,6 +130,8 @@ const login = asyncHandler(async (req, res) => {
         "User Login successfully"
       ));
 });
+
+
 const logout = asyncHandler(async (req, res) => {
   //id find 
   //remove refresh token
@@ -226,7 +228,7 @@ const UpdatedAccountDetails = asyncHandler(async (req, res) => {
     !lastName?.trim() &&
     !contact
   )
-    throw new ApiError(400, "All required fields must be provided");
+    throw new ApiError(400, "one required fields must be provided");
 
   const user = await User.findById(req.user._id);
   if (!user) throw new ApiError(400, "Bad Request request")

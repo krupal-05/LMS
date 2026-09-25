@@ -1,25 +1,23 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import Navbar from '../components/layout/Navbar';
-import { useAuth } from '../context/AuthContext';
-import api from '../services/api';
-import toast from 'react-hot-toast';
-import { exportInventoryCSV, exportCirculationCSV } from '../utils/exportCsv';
+import { useState, useEffect, useCallback, useMemo } from "react";
+import Navbar from "../components/layout/Navbar";
+import api from "../services/api";
+import toast from "react-hot-toast";
+import { exportInventoryCSV, exportCirculationCSV } from "../utils/exportCsv";
 
 // Import Admin Sub-components
-import AdminHeader from '../components/admin/AdminHeader';
-import CirculationQueueTable from '../components/admin/CirculationQueueTable';
-import InventoryGrid from '../components/admin/InventoryGrid';
-import FinesTable from '../components/admin/FinesTable';
-import EventsManager from '../components/admin/EventsManager';
-import AddEditBookModal from '../components/admin/AddEditBookModal';
-import BarcodeScannerModal from '../components/ui/BarcodeScannerModal';
-import Drawer from '../components/ui/Drawer';
-import StatCard from '../components/cards/StatCard';
-import { FiClock, FiBookOpen, FiDollarSign, FiCalendar, FiSend } from 'react-icons/fi';
+import AdminHeader from "../components/admin/AdminHeader";
+import CirculationQueueTable from "../components/admin/CirculationQueueTable";
+import InventoryGrid from "../components/admin/InventoryGrid";
+import FinesTable from "../components/admin/FinesTable";
+import EventsManager from "../components/admin/EventsManager";
+import AddEditBookModal from "../components/admin/AddEditBookModal";
+import BarcodeScannerModal from "../components/ui/BarcodeScannerModal";
+import Drawer from "../components/ui/Drawer";
+import StatCard from "../components/cards/StatCard";
+import { FiClock, FiBookOpen, FiDollarSign, FiCalendar } from "react-icons/fi";
 
 const AdminDashboard = () => {
-  const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview' | 'requests' | 'inventory' | 'fines' | 'events'
+  const [activeTab, setActiveTab] = useState("overview"); // 'overview' | 'requests' | 'inventory' | 'fines' | 'events'
 
   // Data States
   const [books, setBooks] = useState([]);
@@ -29,38 +27,78 @@ const AdminDashboard = () => {
   const [loadingIssues, setLoadingIssues] = useState(true);
 
   // Search & Filter States
-  const [bookSearch, setBookSearch] = useState('');
-  const [issueFilter, setIssueFilter] = useState('pending'); // 'all' | 'pending' | 'approved' | 'returned' | 'rejected'
+  const [bookSearch, setBookSearch] = useState("");
+  const [issueFilter, setIssueFilter] = useState("pending"); // 'all' | 'pending' | 'approved' | 'returned' | 'rejected'
 
   // Pagination States
   const [bookPage, setBookPage] = useState(1);
   const [bookLimit, setBookLimit] = useState(12);
-  const [bookPagination, setBookPagination] = useState({ totalBooks: 0, totalPages: 1 });
+  const [bookPagination, setBookPagination] = useState({
+    totalBooks: 0,
+    totalPages: 1,
+  });
 
   const [issuePage, setIssuePage] = useState(1);
   const [issueLimit, setIssueLimit] = useState(10);
-  const [issuePagination, setIssuePagination] = useState({ totalIssues: 0, totalPages: 1 });
+  const [issuePagination, setIssuePagination] = useState({
+    totalIssues: 0,
+    totalPages: 1,
+  });
+
+  // Action and modal states
+  const [actionLoadingId, setActionLoadingId] = useState(null);
+  const [sendingReminders, setSendingReminders] = useState(false);
+  const [selectedIssueForFine, setSelectedIssueForFine] = useState(null);
+  const [isBookModalOpen, setIsBookModalOpen] = useState(false);
+  const [editingBook, setEditingBook] = useState(null);
+  const [bookFormData, setBookFormData] = useState({
+    title: "",
+    author: "",
+    description: "",
+    category: "computer science",
+    copies: "5",
+    isbn: "",
+  });
+  const [coverFile, setCoverFile] = useState(null);
+  const [coverPreview, setCoverPreview] = useState(null);
+  const [submittingBook, setSubmittingBook] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [eventFormData, setEventFormData] = useState({
+    title: "",
+    date: "",
+    time: "",
+    location: "",
+    category: "Workshop",
+    description: "",
+    speaker: "",
+  });
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
 
   // Fetch API Handlers
   const fetchBooks = useCallback(async () => {
     setLoadingBooks(true);
     try {
-      const res = await api.get('/books/get-all-Books', {
+      const res = await api.get("/books/get-all-Books", {
         params: {
           page: bookPage,
           limit: bookLimit,
-          search: bookSearch
-        }
+          search: bookSearch,
+        },
       });
       const booksPayload = res.data?.data;
       if (booksPayload && Array.isArray(booksPayload.books)) {
         setBooks(booksPayload.books);
-        setBookPagination(booksPayload.pagination || { totalBooks: booksPayload.books.length, totalPages: 1 });
+        setBookPagination(
+          booksPayload.pagination || {
+            totalBooks: booksPayload.books.length,
+            totalPages: 1,
+          },
+        );
       } else {
         setBooks(Array.isArray(booksPayload) ? booksPayload : []);
       }
     } catch {
-      toast.error('Failed to load books catalog');
+      toast.error("Failed to load books catalog");
     } finally {
       setLoadingBooks(false);
     }
@@ -69,22 +107,27 @@ const AdminDashboard = () => {
   const fetchIssues = useCallback(async () => {
     setLoadingIssues(true);
     try {
-      const res = await api.get('/books/all-issues', {
+      const res = await api.get("/books/all-issues", {
         params: {
           page: issuePage,
           limit: issueLimit,
-          status: issueFilter
-        }
+          status: issueFilter,
+        },
       });
       const issuesPayload = res.data?.data;
       if (issuesPayload && Array.isArray(issuesPayload.issues)) {
         setIssues(issuesPayload.issues);
-        setIssuePagination(issuesPayload.pagination || { totalIssues: issuesPayload.issues.length, totalPages: 1 });
+        setIssuePagination(
+          issuesPayload.pagination || {
+            totalIssues: issuesPayload.issues.length,
+            totalPages: 1,
+          },
+        );
       } else {
         setIssues(Array.isArray(issuesPayload) ? issuesPayload : []);
       }
     } catch {
-      toast.error('Failed to load circulation issue requests');
+      toast.error("Failed to load circulation issue requests");
     } finally {
       setLoadingIssues(false);
     }
@@ -92,10 +135,10 @@ const AdminDashboard = () => {
 
   const fetchEvents = useCallback(async () => {
     try {
-      const res = await api.get('/events');
+      const res = await api.get("/events");
       setAdminEvents(res.data?.data || []);
     } catch {
-      console.error('Failed to fetch events');
+      console.error("Failed to fetch events");
     }
   }, []);
 
@@ -110,11 +153,11 @@ const AdminDashboard = () => {
     try {
       setActionLoadingId(issueId);
       await api.post(`/books/approve/${issueId}`);
-      toast.success('Book borrow request approved!');
+      toast.success("Book borrow request approved!");
       fetchIssues();
       fetchBooks();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to approve issue');
+      toast.error(err.response?.data?.message || "Failed to approve issue");
     } finally {
       setActionLoadingId(null);
     }
@@ -124,10 +167,10 @@ const AdminDashboard = () => {
     try {
       setActionLoadingId(issueId);
       await api.post(`/books/reject/${issueId}`);
-      toast.success('Borrow request rejected');
+      toast.success("Borrow request rejected");
       fetchIssues();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to reject issue');
+      toast.error(err.response?.data?.message || "Failed to reject issue");
     } finally {
       setActionLoadingId(null);
     }
@@ -137,11 +180,11 @@ const AdminDashboard = () => {
     try {
       setActionLoadingId(issueId);
       const res = await api.post(`/books/return/${issueId}`);
-      toast.success(res.data?.message || 'Book returned to inventory');
+      toast.success(res.data?.message || "Book returned to inventory");
       fetchIssues();
       fetchBooks();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to process return');
+      toast.error(err.response?.data?.message || "Failed to process return");
     } finally {
       setActionLoadingId(null);
     }
@@ -151,11 +194,11 @@ const AdminDashboard = () => {
     try {
       setActionLoadingId(issueId);
       await api.post(`/books/waive-fine/${issueId}`);
-      toast.success('Fine amount waived!');
+      toast.success("Fine amount waived!");
       setSelectedIssueForFine(null);
       fetchIssues();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to waive fine');
+      toast.error(err.response?.data?.message || "Failed to waive fine");
     } finally {
       setActionLoadingId(null);
     }
@@ -164,10 +207,14 @@ const AdminDashboard = () => {
   const handleSendOverdueReminders = async () => {
     try {
       setSendingReminders(true);
-      const res = await api.post('/notifications/send-reminders');
-      toast.success(res.data?.message || 'Automated overdue reminder alerts sent!');
+      const res = await api.post("/notifications/send-reminders");
+      toast.success(
+        res.data?.message || "Automated overdue reminder alerts sent!",
+      );
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to trigger overdue alerts');
+      toast.error(
+        err.response?.data?.message || "Failed to trigger overdue alerts",
+      );
     } finally {
       setSendingReminders(false);
     }
@@ -177,12 +224,12 @@ const AdminDashboard = () => {
   const handleOpenAddBook = () => {
     setEditingBook(null);
     setBookFormData({
-      title: '',
-      author: '',
-      description: '',
-      category: 'computer science',
-      copies: '5',
-      isbn: ''
+      title: "",
+      author: "",
+      description: "",
+      category: "computer science",
+      copies: "5",
+      isbn: "",
     });
     setCoverFile(null);
     setCoverPreview(null);
@@ -192,12 +239,12 @@ const AdminDashboard = () => {
   const handleOpenEditBook = (book) => {
     setEditingBook(book);
     setBookFormData({
-      title: book.title || '',
-      author: book.author || '',
-      description: book.description || '',
-      category: book.category || 'general',
-      copies: book.copies?.toString() || '1',
-      isbn: book.isbn || ''
+      title: book.title || "",
+      author: book.author || "",
+      description: book.description || "",
+      category: book.category || "general",
+      copies: book.copies?.toString() || "1",
+      isbn: book.isbn || "",
     });
     setCoverPreview(book.cover?.url || null);
     setCoverFile(null);
@@ -206,8 +253,12 @@ const AdminDashboard = () => {
 
   const handleSaveBook = async (e) => {
     e.preventDefault();
-    if (!bookFormData.title.trim() || !bookFormData.author.trim() || !bookFormData.isbn.trim()) {
-      toast.error('Please fill in all required fields (Title, Author, ISBN)');
+    if (
+      !bookFormData.title.trim() ||
+      !bookFormData.author.trim() ||
+      !bookFormData.isbn.trim()
+    ) {
+      toast.error("Please fill in all required fields (Title, Author, ISBN)");
       return;
     }
 
@@ -215,91 +266,102 @@ const AdminDashboard = () => {
       setSubmittingBook(true);
       if (editingBook) {
         const data = new FormData();
-        data.append('title', bookFormData.title);
-        data.append('author', bookFormData.author);
-        data.append('copies', bookFormData.copies);
-        if (coverFile) data.append('cover', coverFile);
+        data.append("title", bookFormData.title);
+        data.append("author", bookFormData.author);
+        data.append("copies", bookFormData.copies);
+        if (coverFile) data.append("cover", coverFile);
 
         await api.patch(`/books/update-book/${editingBook._id}`, data, {
-          headers: { 'Content-Type': 'multipart/form-data' }
+          headers: { "Content-Type": "multipart/form-data" },
         });
-        toast.success('Book details updated successfully!');
+        toast.success("Book details updated successfully!");
       } else {
         if (!coverFile) {
-          toast.error('Book cover image is required for new books');
+          toast.error("Book cover image is required for new books");
           return;
         }
         const data = new FormData();
         for (const key in bookFormData) {
           data.append(key, bookFormData[key]);
         }
-        data.append('cover', coverFile);
+        data.append("cover", coverFile);
 
-        await api.post('/books/add-book', data, {
-          headers: { 'Content-Type': 'multipart/form-data' }
+        await api.post("/books/add-book", data, {
+          headers: { "Content-Type": "multipart/form-data" },
         });
-        toast.success('New book added to inventory!');
+        toast.success("New book added to inventory!");
       }
 
       setIsBookModalOpen(false);
       fetchBooks();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to save book');
+      toast.error(err.response?.data?.message || "Failed to save book");
     } finally {
       setSubmittingBook(false);
     }
   };
 
   const handleDeleteBook = async (bookId) => {
-    if (!window.confirm('Are you sure you want to delete this book from inventory?')) return;
+    if (
+      !window.confirm(
+        "Are you sure you want to delete this book from inventory?",
+      )
+    )
+      return;
     try {
       await api.delete(`/books/delete-book/${bookId}`);
-      toast.success('Book deleted from catalog');
+      toast.success("Book deleted from catalog");
       fetchBooks();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to delete book');
+      toast.error(err.response?.data?.message || "Failed to delete book");
     }
   };
 
   const handleSaveEvent = async (e) => {
     e.preventDefault();
     if (!eventFormData.title.trim() || !eventFormData.date.trim()) {
-      toast.error('Title and Date are required for events');
+      toast.error("Title and Date are required for events");
       return;
     }
     try {
-      await api.post('/events/create', eventFormData);
-      toast.success('New event published to landing page and MongoDB!');
+      await api.post("/events/create", eventFormData);
+      toast.success("New event published to landing page and MongoDB!");
       setIsEventModalOpen(false);
       setEventFormData({
-        title: '',
-        date: '',
-        time: '',
-        location: '',
-        category: 'Workshop',
-        description: '',
-        speaker: ''
+        title: "",
+        date: "",
+        time: "",
+        location: "",
+        category: "Workshop",
+        description: "",
+        speaker: "",
       });
       fetchEvents();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to publish event');
+      toast.error(err.response?.data?.message || "Failed to publish event");
     }
   };
 
   const handleDeleteEvent = async (eventId) => {
-    if (!window.confirm('Are you sure you want to delete this event?')) return;
+    if (!window.confirm("Are you sure you want to delete this event?")) return;
     try {
       await api.delete(`/events/delete/${eventId}`);
-      toast.success('Event deleted');
+      toast.success("Event deleted");
       fetchEvents();
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to delete event');
+      toast.error(err.response?.data?.message || "Failed to delete event");
     }
   };
 
   // Summaries
-  const pendingRequestsCount = useMemo(() => issues.filter((i) => i.status === 'pending').length, [issues]);
-  const activeIssuesCount = useMemo(() => issues.filter((i) => i.status === 'approved').length, [issues]);
+  const pendingRequestsCount = useMemo(
+    () => issues.filter((i) => i.status === "pending").length,
+    [issues],
+  );
+  const activeIssuesCount = useMemo(
+    () => issues.filter((i) => i.status === "approved").length,
+    [issues],
+  );
 
   return (
     <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col justify-between">
@@ -321,11 +383,19 @@ const AdminDashboard = () => {
         {/* Tab Switcher Pills */}
         <div className="flex items-center gap-2 border-b border-slate-800 pb-3 overflow-x-auto no-scrollbar">
           {[
-            { id: 'overview', label: 'Overview Metrics', icon: FiBookOpen },
-            { id: 'requests', label: `Borrow Requests (${pendingRequestsCount})`, icon: FiClock },
-            { id: 'inventory', label: `Book Catalog (${books.length})`, icon: FiBookOpen },
-            { id: 'fines', label: 'Fines & Waivers', icon: FiDollarSign },
-            { id: 'events', label: 'Events Manager', icon: FiCalendar }
+            { id: "overview", label: "Overview Metrics", icon: FiBookOpen },
+            {
+              id: "requests",
+              label: `Borrow Requests (${pendingRequestsCount})`,
+              icon: FiClock,
+            },
+            {
+              id: "inventory",
+              label: `Book Catalog (${books.length})`,
+              icon: FiBookOpen,
+            },
+            { id: "fines", label: "Fines & Waivers", icon: FiDollarSign },
+            { id: "events", label: "Events Manager", icon: FiCalendar },
           ].map((tab) => {
             const IconComp = tab.icon;
             const isActive = activeTab === tab.id;
@@ -335,8 +405,8 @@ const AdminDashboard = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all whitespace-nowrap cursor-pointer ${
                   isActive
-                    ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 shadow-sm'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                    ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 shadow-sm"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                 }`}
               >
                 <IconComp className="w-4 h-4" /> {tab.label}
@@ -346,7 +416,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* TAB 1: OVERVIEW METRICS */}
-        {activeTab === 'overview' && (
+        {activeTab === "overview" && (
           <div className="space-y-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <StatCard
@@ -399,7 +469,7 @@ const AdminDashboard = () => {
         )}
 
         {/* TAB 2: CIRCULATION QUEUE */}
-        {activeTab === 'requests' && (
+        {activeTab === "requests" && (
           <CirculationQueueTable
             issues={issues}
             issueFilter={issueFilter}
@@ -420,7 +490,7 @@ const AdminDashboard = () => {
         )}
 
         {/* TAB 3: BOOK INVENTORY CRUD */}
-        {activeTab === 'inventory' && (
+        {activeTab === "inventory" && (
           <InventoryGrid
             books={books}
             bookSearch={bookSearch}
@@ -439,7 +509,7 @@ const AdminDashboard = () => {
         )}
 
         {/* TAB 4: FINES & WAIVERS */}
-        {activeTab === 'fines' && (
+        {activeTab === "fines" && (
           <FinesTable
             issues={issues}
             onOpenWaiveDrawer={(issue) => setSelectedIssueForFine(issue)}
@@ -448,7 +518,7 @@ const AdminDashboard = () => {
         )}
 
         {/* TAB 5: EVENTS MANAGER */}
-        {activeTab === 'events' && (
+        {activeTab === "events" && (
           <EventsManager
             adminEvents={adminEvents}
             onOpenEventModal={() => setIsEventModalOpen(true)}
@@ -485,17 +555,27 @@ const AdminDashboard = () => {
         {selectedIssueForFine && (
           <div className="space-y-4">
             <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
-              <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase">Borrow Record ID</span>
-              <p className="font-bold text-slate-100 text-sm">{selectedIssueForFine.book?.title}</p>
-              <p className="text-xs text-slate-400 font-mono">Student: {selectedIssueForFine.user?.email}</p>
+              <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase">
+                Borrow Record ID
+              </span>
+              <p className="font-bold text-slate-100 text-sm">
+                {selectedIssueForFine.book?.title}
+              </p>
+              <p className="text-xs text-slate-400 font-mono">
+                Student: {selectedIssueForFine.user?.email}
+              </p>
               <div className="pt-2 border-t border-slate-800 flex justify-between items-center text-xs">
                 <span className="text-slate-400">Total Penalty Fine:</span>
-                <span className="font-extrabold text-rose-400 font-mono">₹{selectedIssueForFine.fineAmount}</span>
+                <span className="font-extrabold text-rose-400 font-mono">
+                  ₹{selectedIssueForFine.fineAmount}
+                </span>
               </div>
             </div>
 
             <p className="text-xs text-slate-400 leading-relaxed">
-              Waiving this fine will update the record status to <strong className="text-purple-400">Waived</strong> and clear the student's debt balance.
+              Waiving this fine will update the record status to{" "}
+              <strong className="text-purple-400">Waived</strong> and clear the
+              student's debt balance.
             </p>
 
             <div className="pt-4 flex justify-end gap-2 border-t border-slate-800">
@@ -510,7 +590,9 @@ const AdminDashboard = () => {
                 disabled={actionLoadingId === selectedIssueForFine._id}
                 className="px-4 py-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 font-semibold text-xs cursor-pointer"
               >
-                {actionLoadingId === selectedIssueForFine._id ? 'Waiving...' : 'Confirm Fine Waiver'}
+                {actionLoadingId === selectedIssueForFine._id
+                  ? "Waiving..."
+                  : "Confirm Fine Waiver"}
               </button>
             </div>
           </div>
