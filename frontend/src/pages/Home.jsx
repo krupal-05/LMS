@@ -178,6 +178,8 @@ const Home = () => {
     <div className="min-h-screen bg-[#0B0F17] text-slate-100 flex flex-col justify-between selection:bg-cyan-500 selection:text-slate-950">
       <Navbar />
 
+      <main id="main-content">
+
       {/* SECTION 1: WHAT'S HAPPENING AT THE LIBRARY HERO */}
       <HappeningHero
         events={events}
@@ -456,6 +458,8 @@ const Home = () => {
           </div>
         )}
       </Modal>
+
+      </main>
 
       {/* Footer */}
       <footer className="border-t border-slate-800/80 bg-slate-950 py-8 px-4 sm:px-6 lg:px-8 text-center text-xs text-slate-500">

@@ -40,6 +40,7 @@
 - [Running the Project](#-running-the-project)
 - [Deployment Guide](#-deployment-guide)
 - [Security Features](#-security-features)
+- [SEO & Web Accessibility (WCAG 2.1)](#-seo--web-accessibility-wcag-21)
 - [Author & License](#-author--license)
 
 ---
@@ -97,6 +98,7 @@ The **Library Management System (LMS)** simplifies library operations and digiti
 - **Authentication**: [JSON Web Tokens (JWT)](https://jwt.io/) & [bcrypt](https://github.com/kelektiv/node.bcrypt.js)
 - **Session Security**: `cookie-parser` (HTTP-only cookies)
 - **File Uploads**: [Multer](https://github.com/expressjs/multer) (temp disk buffer) + [Cloudinary](https://cloudinary.com/) (cloud CDN)
+- **Security Headers**: [Helmet](https://helmetjs.github.io/) (Content Security Policy, anti-clickjacking, strict referrer)
 - **CORS**: Configured with dynamic origin whitelist
 
 ### Database & Cloud
@@ -172,6 +174,9 @@ LMS/
 │
 └── frontend/
     ├── public/
+    │   ├── _headers                  # Security headers & CSP configuration for Render static hosting
+    │   ├── robots.txt                # Search bot crawler rules & XML sitemap reference
+    │   └── sitemap.xml               # Canonical XML sitemap for search engines
     ├── src/
     │   ├── assets/                    # Static images, icons, illustrations
     │   ├── components/
@@ -475,6 +480,23 @@ npm run dev
 - 🚦 **RBAC Protection**: Unauthorized privilege escalation prevented at route-level.
 - 🧹 **Automatic Cleanup**: Local Multer file buffers automatically removed after Cloudinary dispatch.
 - 🌐 **Restricted CORS Policy**: Configured to only permit trusted frontend origins and local development hosts.
+- 🛡️ **Helmet Security Middleware**: Hardens Express API responses with Content Security Policy (CSP), anti-clickjacking (`X-Frame-Options: DENY`), MIME sniffing prevention (`X-Content-Type-Options: nosniff`), and strict referrer isolation.
+- 🌐 **Edge Security Headers**: Custom `_headers` configuration deployed on Render static hosting enforces strict CSP, anti-framing, Permissions-Policy, and XSS protection.
+
+---
+
+## 🎯 SEO & Web Accessibility (WCAG 2.1)
+
+### 🔍 Search Engine Optimization (SEO)
+- **Primary Metadata & Open Graph**: Full metadata suite in `index.html` including descriptive title (`Library Management System | LMS`), meta description, canonical URL (`https://lms-frontend-25jw.onrender.com/`), Open Graph tags (`og:title`, `og:description`, `og:image`, `og:url`), and Twitter Cards for rich social previews.
+- **Crawler Directives (`robots.txt`)**: Allows search engines to index public catalog pages (`/books`, `/events`) while preventing crawling of private authentication (`/login`, `/register`) and protected dashboard routes (`/dashboard`, `/admin`).
+- **Search Engine Sitemap (`sitemap.xml`)**: Canonical XML sitemap prioritizing core public pages with change frequencies and last modification dates for rapid indexation.
+
+### ♿ Web Accessibility (a11y)
+- **Semantic Landmark Roles**: Integrated `<main id="main-content">` landmark structuring for screen readers and accessible navigation.
+- **Explicit Form Association**: Complete `htmlFor` and `id` bindings across all inputs (`Login.jsx`, `Register.jsx`, `Input.jsx`) guaranteeing assistive technology recognition.
+- **Accessible Action Controls**: Icon-only elements (mobile menu hamburger, logout button, password visibility toggles) equipped with explicit `aria-label` tags.
+- **Browser Autofill Standards**: Form inputs configured with standard `autoComplete` attributes (`email`, `current-password`, `new-password`, `given-name`, `family-name`, `tel`) for smooth autofill behavior.
 
 ---
 

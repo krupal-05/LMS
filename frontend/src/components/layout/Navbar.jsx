@@ -43,7 +43,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1.5 bg-slate-900/60 border border-slate-800/80 p-1 rounded-2xl">
+          <nav className="hidden md:flex items-center gap-1.5 bg-slate-900/60 border border-slate-800/80 p-1 rounded-2xl" aria-label="Main navigation">
             <NavLink to="/" className={navLinkClass} end>
               <FiBookOpen className="w-4 h-4" /> Home
             </NavLink>
@@ -99,12 +99,12 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {/* Logout Button */}
                 <button
                   onClick={logoutAction}
                   disabled={loading}
                   className="p-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 border border-transparent hover:border-rose-500/20 transition-all cursor-pointer"
                   title="Log Out"
+                  aria-label="Log out of your account"
                 >
                   <FiLogOut className="w-4 h-4" />
                 </button>
@@ -127,10 +127,11 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Hamburger Toggle */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="md:hidden p-2 rounded-xl text-slate-300 hover:bg-slate-800 border border-slate-800"
+            aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={menuOpen}
           >
             {menuOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
           </button>

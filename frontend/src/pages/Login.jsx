@@ -90,13 +90,14 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Email Input */}
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">Email Address</label>
+                <label htmlFor="login-email" className="block text-xs font-medium text-slate-300 mb-1.5">Email Address</label>
                 <div className="relative">
                   <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     type="email"
                     name="email"
-                    id="email"
+                    id="login-email"
+                    autoComplete="email"
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="student@institution.edu"
@@ -112,13 +113,14 @@ const Login = () => {
 
               {/* Password Input */}
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1.5">Password</label>
+                <label htmlFor="login-password" className="block text-xs font-medium text-slate-300 mb-1.5">Password</label>
                 <div className="relative">
                   <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     name="password"
-                    id="password"
+                    id="login-password"
+                    autoComplete="current-password"
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="••••••••••••"
@@ -132,6 +134,7 @@ const Login = () => {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <FiEyeOff className="w-4 h-4" /> : <FiEye className="w-4 h-4" />}
                   </button>

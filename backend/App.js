@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
 import cookieParser from 'cookie-parser';
 
 const app = express();
@@ -8,6 +9,31 @@ app.use((req, res, next) => {
   console.log(`[REQUEST] ${req.method} ${req.url} - Origin: ${req.headers.origin}`);
   next();
 });
+
+// Security headers via Helmet
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        imgSrc: ["'self'", "data:", "blob:", "https://res.cloudinary.com", "https://images.unsplash.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        connectSrc: ["'self'", process.env.FRONTEND_URL || "https://lms-frontend-25jw.onrender.com"],
+        frameSrc: ["'none'"],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        formAction: ["'self'"],
+        frameAncestors: ["'none'"],
+      },
+    },
+    crossOriginEmbedderPolicy: false, // Allow loading cross-origin images from Cloudinary/Unsplash
+    crossOriginOpenerPolicy: { policy: "same-origin" },
+    crossOriginResourcePolicy: { policy: "cross-origin" }, // Backend serves API responses to a different origin frontend
+    referrerPolicy: { policy: "strict-origin-when-cross-origin" },
+  })
+);
 
 // CORS — allow the Vite frontend with credentials (cookies)
 app.use(cors({

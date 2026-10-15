@@ -17,11 +17,13 @@ const Input = ({
 
       <input 
       type={type}
+      id={name}
       placeholder={placeholder}
       value={value}
       onChange={onChange}
       name={name}
       required = {required}
+      autoComplete={type === 'email' ? 'email' : type === 'password' ? 'current-password' : type === 'tel' ? 'tel' : 'off'}
 
       className=' w-full
       rounded-xl

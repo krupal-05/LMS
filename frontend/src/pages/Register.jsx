@@ -137,12 +137,14 @@ const Register = () => {
               {/* First Name & Last Name */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">First Name</label>
+                  <label htmlFor="reg-firstName" className="block text-xs font-medium text-slate-300 mb-1">First Name</label>
                   <div className="relative">
                     <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs" />
                     <input
                       type="text"
                       name="firstName"
+                      id="reg-firstName"
+                      autoComplete="given-name"
                       value={formData.firstName}
                       onChange={handleChange}
                       placeholder="Jane"
@@ -155,12 +157,14 @@ const Register = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Last Name</label>
+                  <label htmlFor="reg-lastName" className="block text-xs font-medium text-slate-300 mb-1">Last Name</label>
                   <div className="relative">
                     <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs" />
                     <input
                       type="text"
                       name="lastName"
+                      id="reg-lastName"
+                      autoComplete="family-name"
                       value={formData.lastName}
                       onChange={handleChange}
                       placeholder="Doe"
@@ -175,12 +179,14 @@ const Register = () => {
 
               {/* Email */}
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Email Address</label>
+                <label htmlFor="reg-email" className="block text-xs font-medium text-slate-300 mb-1">Email Address</label>
                 <div className="relative">
                   <FiMail className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs" />
                   <input
                     type="email"
                     name="email"
+                    id="reg-email"
+                    autoComplete="email"
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="student@institution.edu"
@@ -194,12 +200,14 @@ const Register = () => {
 
               {/* Contact */}
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Contact Number</label>
+                <label htmlFor="reg-contact" className="block text-xs font-medium text-slate-300 mb-1">Contact Number</label>
                 <div className="relative">
                   <FiPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs" />
                   <input
                     type="tel"
                     name="contact"
+                    id="reg-contact"
+                    autoComplete="tel"
                     value={formData.contact}
                     onChange={handleChange}
                     placeholder="10-digit mobile number"
@@ -214,12 +222,14 @@ const Register = () => {
               {/* Password & Confirm Password */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Password</label>
+                  <label htmlFor="reg-password" className="block text-xs font-medium text-slate-300 mb-1">Password</label>
                   <div className="relative">
                     <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       name="password"
+                      id="reg-password"
+                      autoComplete="new-password"
                       value={formData.password}
                       onChange={handleChange}
                       placeholder="Min 6 chars"
@@ -231,6 +241,7 @@ const Register = () => {
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500"
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? <FiEyeOff className="w-3.5 h-3.5" /> : <FiEye className="w-3.5 h-3.5" />}
                     </button>
@@ -239,12 +250,14 @@ const Register = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Confirm Password</label>
+                  <label htmlFor="reg-confirmPassword" className="block text-xs font-medium text-slate-300 mb-1">Confirm Password</label>
                   <div className="relative">
                     <FiLock className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs" />
                     <input
                       type={showConfirm ? 'text' : 'password'}
                       name="confirmPassword"
+                      id="reg-confirmPassword"
+                      autoComplete="new-password"
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       placeholder="Re-enter password"
@@ -256,6 +269,7 @@ const Register = () => {
                       type="button"
                       onClick={() => setShowConfirm(!showConfirm)}
                       className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500"
+                      aria-label={showConfirm ? 'Hide password confirmation' : 'Show password confirmation'}
                     >
                       {showConfirm ? <FiEyeOff className="w-3.5 h-3.5" /> : <FiEye className="w-3.5 h-3.5" />}
                     </button>
