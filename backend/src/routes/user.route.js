@@ -30,6 +30,7 @@ router.route("/register").post(upload.fields([
 router.route("/login").post(login)
 router.route("/logout").post(verifyeJWT, logout)
 router.route("/refresh-token").post(reNewAccessToken)
+router.route("/refresh").post(reNewAccessToken)
 router.route("/me").get(verifyeJWT, getCurrentUser)
 
 //update DATA  

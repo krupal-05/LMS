@@ -222,6 +222,10 @@ LMS/
 4. **Role-Based Access Control (RBAC)**:
    - `verifyeJWT`: Authenticates token from cookie or `Authorization: Bearer <token>` header.
    - `verifyAdmin`: Confirms `req.user.role === 'admin'`. Denies non-admin access with `403 Forbidden`.
+5. **Frontend Route Protection (`ProtectedRoute.jsx`)**:
+   - Guards `/admin/dashboard`, `/add-book`, and `/student/dashboard` using React Router.
+   - Automatically redirects unauthenticated users or role-mismatched users to `/login`.
+   - On app startup, verifies session status against `/users/me` and `/users/refresh-token` before rendering protected views.
 
 ---
 
@@ -277,6 +281,7 @@ $$\text{Fine Amount (₹)} = \max(0, \text{Days Overdue} \times 5)$$
 | `POST` | `/users/login` | Login user & set auth cookies | No | Public |
 | `POST` | `/users/logout` | Invalidate tokens & clear cookies | Yes | Any |
 | `POST` | `/users/refresh-token` | Renew access token via refresh token | No | Public |
+| `POST` | `/users/refresh` | Alias for `/users/refresh-token` | No | Public |
 | `GET` | `/users/me` | Fetch logged-in user profile | Yes | Any |
 | `PATCH` | `/users/update-profile` | Update account details (name, contact) | Yes | Any |
 | `PATCH` | `/users/change-password` | Change user password | Yes | Any |

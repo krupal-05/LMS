@@ -188,11 +188,19 @@ const reNewAccessToken = asyncHandler(async (req, res) => {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
     }
 
+    const loggedUser = await User.findById(user._id).select("-password -reFreshToken");
+
     return res
       .status(200)
       .cookie("accessToken", accessToken, option)
       .cookie("reFreshToken", reFreshToken, option)
-      .json(new ApiResponse(201, "Access token Renew Successfully "))
+      .json(
+        new ApiResponse(
+          200,
+          { user: loggedUser, loggedUser, accessToken, reFreshToken },
+          "Access token renewed successfully"
+        )
+      );
 
   } catch (error) {
     throw new ApiError(401, error?.message || "invalid Refresh token")
