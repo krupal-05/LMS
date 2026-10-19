@@ -17,7 +17,7 @@ const BookCard = ({ book, onRequest, isRequested, isPending, userRole, onEdit, o
       className="glass-card rounded-2xl p-4 flex flex-col justify-between border border-slate-800/80 bg-slate-900/60 hover:border-cyan-500/40 group relative overflow-hidden"
     >
       {/* Category Pill Badge */}
-      <div className="relative mb-3 aspect-[4/3] rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
+      <div className="relative mb-3 aspect-[3/4] rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
         <img
           src={coverUrl}
           alt={title}
