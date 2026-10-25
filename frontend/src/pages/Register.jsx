@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import { useAuth } from '../context/AuthContext';
 import { FiUser, FiMail, FiLock, FiPhone, FiEye, FiEyeOff, FiCamera, FiBookOpen, FiArrowRight } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 
 const Register = () => {
-  const { registerAction, loading } = useAuth();
+  const { user, registerAction, loading } = useAuth();
   const fileInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
@@ -22,6 +22,11 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
+  // If already authenticated, redirect immediately
+  if (!loading && user) {
+    return <Navigate to={user.role === 'admin' ? '/admin/dashboard' : '/student/dashboard'} replace />;
+  }
 
   const validate = () => {
     const e = {};

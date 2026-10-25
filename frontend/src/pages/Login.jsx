@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import { useAuth } from '../context/AuthContext';
 import { FiMail, FiLock, FiEye, FiEyeOff, FiBookOpen, FiArrowRight, FiShield, FiUserCheck } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 
 const Login = () => {
-  const { loginAction, loading } = useAuth();
+  const { user, loginAction, loading } = useAuth();
+  const location = useLocation();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState('student'); // 'student' | 'admin'
+
+  // If already authenticated, redirect immediately without flashing the login form
+  if (!loading && user) {
+    const target = location.state?.from?.pathname || (user.role === 'admin' ? '/admin/dashboard' : '/student/dashboard');
+    return <Navigate to={target} replace />;
+  }
 
   const validate = () => {
     const newErrors = {};

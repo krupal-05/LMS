@@ -8,47 +8,49 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    // Check if a session hint exists from previous login
+    const hasSessionHint = typeof window !== 'undefined' && localStorage.getItem('lms_has_session') === 'true';
+    
+    // Optimistically restore cached user if hint exists to avoid layout flashes
+    const [user, setUser] = useState(() => {
+        if (!hasSessionHint) return null;
+        try {
+            const saved = localStorage.getItem('lms_user');
+            return saved ? JSON.parse(saved) : null;
+        } catch {
+            return null;
+        }
+    });
+
+    // Only start in loading state if there is a session hint to verify
+    const [loading, setLoading] = useState(hasSessionHint);
     const navigate = useNavigate();
 
-    // Verify the session when the app opens
+    // Verify session in background if session hint exists
     useEffect(() => {
+        // If there is no session hint, user is anonymous; no API calls needed
+        if (!hasSessionHint) {
+            setLoading(false);
+            return;
+        }
+
         let active = true;
 
-        const checkAuth = async () => {
+        const verifySession = async () => {
             try {
-                // First try getting current user profile with active accessToken cookie
-                const meRes = await api.get('/users/me');
-                const meUser = meRes.data?.data;
-                if (active && meUser) {
-                    setUser(meUser);
-                    return;
+                // api.js response interceptor automatically handles 401 & token refresh
+                const res = await api.get('/users/me');
+                const verifiedUser = res.data?.data;
+
+                if (active && verifiedUser) {
+                    setUser(verifiedUser);
+                    localStorage.setItem('lms_user', JSON.stringify(verifiedUser));
                 }
             } catch (err) {
-                // If accessToken expired or not yet present, attempt to renew using refreshToken cookie
-                try {
-                    const res = await api.post('/users/refresh-token');
-                    const loggedUser =
-                        res.data?.data?.user ||
-                        res.data?.data?.loggedUser ||
-                        res.data?.user;
-
-                    if (active && loggedUser) {
-                        setUser(loggedUser);
-                        return;
-                    }
-
-                    // Fallback: If refresh succeeded, re-fetch profile
-                    const retryMe = await api.get('/users/me');
-                    if (active && retryMe.data?.data) {
-                        setUser(retryMe.data.data);
-                        return;
-                    }
-                } catch (refreshErr) {
-                    if (active) {
-                        setUser(null);
-                    }
+                if (active) {
+                    setUser(null);
+                    localStorage.removeItem('lms_has_session');
+                    localStorage.removeItem('lms_user');
                 }
             } finally {
                 if (active) {
@@ -57,12 +59,23 @@ export const AuthProvider = ({ children }) => {
             }
         };
 
-        checkAuth();
+        verifySession();
+
+        // Listen for session expiry event from Axios interceptor
+        const handleSessionExpired = () => {
+            if (active) {
+                setUser(null);
+                setLoading(false);
+            }
+        };
+
+        window.addEventListener('lms-session-expired', handleSessionExpired);
 
         return () => {
             active = false;
+            window.removeEventListener('lms-session-expired', handleSessionExpired);
         };
-    }, []);
+    }, [hasSessionHint]);
 
     // Logout
     const logoutAction = async () => {
@@ -73,10 +86,10 @@ export const AuthProvider = ({ children }) => {
             toast.success('Logged out successfully');
         } catch (error) {
             console.error('Logout API failed:', error);
-            toast.error('Could not confirm server logout. Local session cleared.');
+            toast.error('Local session cleared.');
         } finally {
-            // Always clear the frontend session
             setUser(null);
+            localStorage.removeItem('lms_has_session');
             localStorage.removeItem('lms_user');
             setLoading(false);
             navigate('/login', { replace: true });
@@ -103,6 +116,8 @@ export const AuthProvider = ({ children }) => {
                 }
 
                 setUser(null);
+                localStorage.removeItem('lms_has_session');
+                localStorage.removeItem('lms_user');
                 toast.error(
                     `Unauthorized. This account is registered as a ${loggedUser.role}, not an ${selectedRole}.`
                 );
@@ -110,12 +125,14 @@ export const AuthProvider = ({ children }) => {
             }
 
             setUser(loggedUser);
+            localStorage.setItem('lms_has_session', 'true');
+            localStorage.setItem('lms_user', JSON.stringify(loggedUser));
             toast.success('Logged in successfully! Welcome back 👋');
 
             if (loggedUser.role === 'admin') {
-                navigate('/admin/dashboard');
+                navigate('/admin/dashboard', { replace: true });
             } else {
-                navigate('/student/dashboard');
+                navigate('/student/dashboard', { replace: true });
             }
         } catch (error) {
             const msg =
@@ -158,16 +175,7 @@ export const AuthProvider = ({ children }) => {
                 loading
             }}
         >
-            {loading ? (
-                <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-300">
-                    <div className="flex flex-col items-center gap-3">
-                        <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin" />
-                        <p className="text-sm font-medium">Checking session...</p>
-                    </div>
-                </div>
-            ) : (
-                children
-            )}
+            {children}
         </AuthContext.Provider>
     );
 };
