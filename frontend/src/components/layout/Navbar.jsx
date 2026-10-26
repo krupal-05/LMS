@@ -35,9 +35,9 @@ const Navbar = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-base font-extrabold tracking-tight text-slate-100 group-hover:text-cyan-400 transition-colors">
-                <span className="text-gradient">Library</span> Management System
+                <span className="text-gradient">Library</span> Info
               </span>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400">Library Suite</span>
+          
             </div>
           </Link>
 
