@@ -18,12 +18,7 @@ const AdminHeader = ({ onOpenAddBook, onOpenScanner, onRefresh, loading }) => {
       </div>
 
       <div className="flex items-center gap-3">
-        <button
-          onClick={onOpenScanner}
-          className="px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-cyan-400 hover:border-cyan-500/40 font-semibold text-xs flex items-center gap-1.5 transition-all cursor-pointer"
-        >
-          <FiCamera className="w-4 h-4" /> Scan Barcode
-        </button>
+
         <button
           onClick={onOpenAddBook}
           className="px-4 py-2.5 rounded-xl bg-gradient-accent text-white font-semibold text-xs flex items-center gap-2 transition-all shadow-md shadow-cyan-500/20 active:scale-95 cursor-pointer"
