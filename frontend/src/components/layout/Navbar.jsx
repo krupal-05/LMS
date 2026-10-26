@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { FiMenu, FiX, FiLogOut, FiUser, FiBookOpen, FiGrid, FiShield, FiSun, FiMoon, FiClock } from 'react-icons/fi';
@@ -9,7 +9,6 @@ const Navbar = () => {
   const { user, logoutAction, loading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
 
   const navLinkClass = ({ isActive }) =>
     `flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wide transition-all ${

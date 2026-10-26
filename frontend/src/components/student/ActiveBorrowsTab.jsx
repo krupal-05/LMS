@@ -1,4 +1,3 @@
-import React from 'react';
 import { FiClock, FiCalendar, FiBookOpen } from 'react-icons/fi';
 import { getBookCover } from '../../utils/bookCover';
 import Badge from '../ui/Badge';

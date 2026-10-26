@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import { useAuth } from '../context/AuthContext';

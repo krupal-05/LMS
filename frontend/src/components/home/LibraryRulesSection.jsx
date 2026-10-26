@@ -13,8 +13,7 @@ import {
   FiSlash,
   FiChevronRight,
   FiFileText,
-  FiLock,
-  FiHelpCircle
+  FiLock
 } from 'react-icons/fi';
 
 const LibraryRulesSection = () => {

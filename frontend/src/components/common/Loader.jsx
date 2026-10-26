@@ -1,4 +1,3 @@
-import React from 'react';
 import { FiRefreshCw } from 'react-icons/fi';
 
 const Loader = ({ label = 'Loading...', size = 'md', className = '' }) => {

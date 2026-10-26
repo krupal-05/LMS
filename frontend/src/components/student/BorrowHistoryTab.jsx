@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FiClock } from 'react-icons/fi';
 import Badge from '../ui/Badge';
 import EmptyState from '../ui/EmptyState';

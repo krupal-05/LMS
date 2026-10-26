@@ -1,6 +1,5 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { FiBookOpen, FiZap, FiShield, FiTrendingUp } from 'react-icons/fi';
+import { FiBookOpen, FiZap } from 'react-icons/fi';
 
 const HeroImageShowcase = () => {
   return (

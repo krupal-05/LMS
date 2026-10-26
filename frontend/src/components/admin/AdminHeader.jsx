@@ -1,4 +1,3 @@
-import React from 'react';
 import { FiShield, FiPlus, FiCamera, FiRefreshCw } from 'react-icons/fi';
 
 const AdminHeader = ({ onOpenAddBook, onOpenScanner, onRefresh, loading }) => {

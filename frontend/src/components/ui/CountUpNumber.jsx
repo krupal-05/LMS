@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const CountUpNumber = ({ value = 0, duration = 1500, suffix = '', prefix = '' }) => {
   const [displayValue, setDisplayValue] = useState(0);

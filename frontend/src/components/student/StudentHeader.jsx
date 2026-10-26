@@ -1,4 +1,3 @@
-import React from 'react';
 import { FiBookOpen, FiClock, FiDollarSign } from 'react-icons/fi';
 import StatCard from '../cards/StatCard';
 

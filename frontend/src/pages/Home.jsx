@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   FiBookOpen,
-  FiSearch,
   FiCalendar,
   FiClock,
   FiMapPin,
-  FiStar,
   FiZap,
   FiUsers,
   FiShield,
   FiArrowRight,
-  FiBookmark,
   FiLayers,
-  FiHelpCircle,
-  FiAward,
-  FiTrendingUp,
-  FiCheckCircle
+  FiTrendingUp
 } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import api from '../services/api';
@@ -98,7 +92,7 @@ const Home = () => {
   const [limit, setLimit] = useState(8);
   const [pagination, setPagination] = useState({ totalBooks: 0, totalPages: 1, hasNextPage: false, hasPrevPage: false });
 
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     try {
       setLoading(true);
       const res = await api.get('/books/get-all-Books', {
@@ -124,9 +118,9 @@ const Home = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, limit, searchQuery, selectedCategory]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const res = await api.get('/books/stats');
       if (res.data?.data) {
@@ -135,11 +129,11 @@ const Home = () => {
     } catch (err) {
       console.error('Failed to load library real-time statistics:', err);
     }
-  };
+  }, []);
 
   const [events, setEvents] = useState(defaultEvents);
 
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       const res = await api.get('/events');
       const apiEvents = res.data?.data;
@@ -149,14 +143,17 @@ const Home = () => {
     } catch (err) {
       console.error('Failed to fetch events from backend:', err);
     }
-  };
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     fetchBooks();
+  }, [fetchBooks]);
+
+  useEffect(() => {
     fetchStats();
     fetchEvents();
-  }, [page, limit, selectedCategory]);
+  }, [fetchStats, fetchEvents]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -166,7 +163,7 @@ const Home = () => {
 
   const categories = ['all', 'computer science', 'fiction', 'engineering', 'science', 'general'];
 
-  const handleRequestBook = (bookId) => {
+  const handleRequestBook = () => {
     if (!user) {
       navigate('/login');
       return;

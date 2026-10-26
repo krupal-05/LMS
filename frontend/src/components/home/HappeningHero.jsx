@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import {
   FiCalendar,
@@ -7,21 +6,12 @@ import {
   FiClock,
   FiFileText,
   FiBookOpen,
-  FiChevronLeft,
-  FiChevronRight,
-  FiArrowRight,
-  FiSearch,
-  FiCommand
+  FiArrowRight
 } from 'react-icons/fi';
 
 const HappeningHero = ({
   events = [],
   books = [],
-  searchQuery = '',
-  setSearchQuery,
-  handleSearchSubmit,
-  setSelectedCategory,
-  setPage,
   onScrollToEvents,
   onScrollToCatalog,
   onRequestBook

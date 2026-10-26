@@ -1,4 +1,3 @@
-import React from 'react';
 
 const variantStyles = {
   pending: 'bg-amber-500/10 text-amber-600 border-amber-500/30 dark:text-amber-400',

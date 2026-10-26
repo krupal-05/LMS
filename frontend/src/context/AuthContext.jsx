@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import api from '../services/api';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -30,7 +30,6 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         // If there is no session hint, user is anonymous; no API calls needed
         if (!hasSessionHint) {
-            setLoading(false);
             return;
         }
 
@@ -46,7 +45,7 @@ export const AuthProvider = ({ children }) => {
                     setUser(verifiedUser);
                     localStorage.setItem('lms_user', JSON.stringify(verifiedUser));
                 }
-            } catch (err) {
+            } catch {
                 if (active) {
                     setUser(null);
                     localStorage.removeItem('lms_has_session');

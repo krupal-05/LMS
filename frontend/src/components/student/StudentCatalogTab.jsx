@@ -1,4 +1,3 @@
-import React from 'react';
 import { FiSearch, FiBookOpen } from 'react-icons/fi';
 import BookCard from '../cards/BookCard';
 import EmptyState from '../ui/EmptyState';

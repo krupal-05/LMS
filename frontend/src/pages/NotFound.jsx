@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import { FiAlertTriangle, FiArrowLeft } from 'react-icons/fi';

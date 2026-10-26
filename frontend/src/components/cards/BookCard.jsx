@@ -1,11 +1,10 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { FiBookmark, FiCheck } from 'react-icons/fi';
 import Badge from '../ui/Badge';
 import { getBookCover } from '../../utils/bookCover';
 
 const BookCard = ({ book, onRequest, isRequested, isPending, userRole, onEdit, onDelete }) => {
-  const { title, author, category, copies, availableCopies, isbn, description } = book || {};
+  const { title, author, category, availableCopies, isbn, description } = book || {};
 
   const isAvailable = availableCopies > 0;
   const coverUrl = getBookCover(book);

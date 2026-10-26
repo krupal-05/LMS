@@ -1,9 +1,8 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { FiStar, FiBookmark, FiAward } from 'react-icons/fi';
 import Badge from '../ui/Badge';
 
-const FeaturedBookStack = ({ book, onRequest, user }) => {
+const FeaturedBookStack = ({ book, onRequest }) => {
   const defaultBook = book || {
     title: 'Clean Code: A Handbook of Agile Software Craftsmanship',
     author: 'Robert C. Martin',

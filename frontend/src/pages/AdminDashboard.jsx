@@ -13,6 +13,7 @@ import EventsManager from "../components/admin/EventsManager";
 import AddEditBookModal from "../components/admin/AddEditBookModal";
 import BarcodeScannerModal from "../components/ui/BarcodeScannerModal";
 import Drawer from "../components/ui/Drawer";
+import Modal from "../components/ui/Modal";
 import StatCard from "../components/cards/StatCard";
 import { FiClock, FiBookOpen, FiDollarSign, FiCalendar } from "react-icons/fi";
 
@@ -605,6 +606,110 @@ const AdminDashboard = () => {
         onClose={() => setIsScannerOpen(false)}
         books={books}
       />
+
+      {/* Add Event Modal */}
+      <Modal
+        isOpen={isEventModalOpen}
+        onClose={() => setIsEventModalOpen(false)}
+        title="Publish New Library Event"
+      >
+        <form onSubmit={handleSaveEvent} className="space-y-4">
+          <div>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">Event Title *</label>
+            <input
+              type="text"
+              required
+              value={eventFormData.title}
+              onChange={(e) => setEventFormData({ ...eventFormData, title: e.target.value })}
+              placeholder="e.g. AI & Neural Networks Symposium"
+              className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-100"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">Date *</label>
+              <input
+                type="text"
+                required
+                value={eventFormData.date}
+                onChange={(e) => setEventFormData({ ...eventFormData, date: e.target.value })}
+                placeholder="e.g. August 15, 2026"
+                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-100"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">Time</label>
+              <input
+                type="text"
+                value={eventFormData.time}
+                onChange={(e) => setEventFormData({ ...eventFormData, time: e.target.value })}
+                placeholder="e.g. 2:00 PM - 5:00 PM"
+                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-100"
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">Location</label>
+              <input
+                type="text"
+                value={eventFormData.location}
+                onChange={(e) => setEventFormData({ ...eventFormData, location: e.target.value })}
+                placeholder="e.g. Seminar Room 102"
+                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-100"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1">Category</label>
+              <select
+                value={eventFormData.category}
+                onChange={(e) => setEventFormData({ ...eventFormData, category: e.target.value })}
+                className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-100"
+              >
+                <option value="Workshop">Workshop</option>
+                <option value="Symposium">Symposium</option>
+                <option value="Exhibition">Exhibition</option>
+                <option value="Webinar">Webinar</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">Guest Speaker</label>
+            <input
+              type="text"
+              value={eventFormData.speaker}
+              onChange={(e) => setEventFormData({ ...eventFormData, speaker: e.target.value })}
+              placeholder="e.g. Dr. Jane Doe (Tech Lead)"
+              className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-100"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-slate-300 mb-1">Description</label>
+            <textarea
+              rows="3"
+              value={eventFormData.description}
+              onChange={(e) => setEventFormData({ ...eventFormData, description: e.target.value })}
+              placeholder="Brief summary of what attendees can expect..."
+              className="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-100 resize-none"
+            />
+          </div>
+          <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
+            <button
+              type="button"
+              onClick={() => setIsEventModalOpen(false)}
+              className="px-4 py-2 rounded-xl bg-slate-800 text-xs text-slate-300 font-semibold cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 rounded-xl bg-gradient-accent text-white text-xs font-semibold cursor-pointer"
+            >
+              Publish Event
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };

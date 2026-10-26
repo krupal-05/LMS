@@ -1,4 +1,3 @@
-import React from 'react';
 import { FiDollarSign, FiCheckCircle } from 'react-icons/fi';
 import Badge from '../ui/Badge';
 import EmptyState from '../ui/EmptyState';

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Modal from './Modal';
-import { FiCamera, FiSearch, FiCheck, FiZap, FiBookOpen } from 'react-icons/fi';
+import { FiCamera, FiSearch } from 'react-icons/fi';
 import { getBookCover } from '../../utils/bookCover';
 import api from '../../services/api';
 import toast from 'react-hot-toast';

@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Navbar from '../components/layout/Navbar';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { FiUser, FiMail, FiPhone, FiLock, FiShield, FiCheckCircle } from 'react-icons/fi';
-import { motion } from 'framer-motion';
+import { FiUser, FiLock, FiShield } from 'react-icons/fi';
 
 const Profile = () => {
-  const { user, setUser } = useAuth();
+  const { user } = useAuth();
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [loadingPass, setLoadingPass] = useState(false);

@@ -1,4 +1,3 @@
-import React from 'react';
 import { FiCalendar, FiPlus, FiTrash2 } from 'react-icons/fi';
 import EmptyState from '../ui/EmptyState';
 
