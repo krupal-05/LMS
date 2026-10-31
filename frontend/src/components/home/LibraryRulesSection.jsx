@@ -15,8 +15,12 @@ import {
   FiFileText,
   FiLock
 } from 'react-icons/fi';
+import { useTheme } from '../../context/ThemeContext';
 
 const LibraryRulesSection = () => {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedRule, setExpandedRule] = useState('POL-01');
@@ -144,6 +148,36 @@ const LibraryRulesSection = () => {
     }
   ];
 
+  const getPriorityBadgeClasses = (priorityColor) => {
+    if (isLight) {
+      switch (priorityColor) {
+        case 'rose':
+          return 'bg-rose-50 text-rose-700 border-rose-200';
+        case 'purple':
+          return 'bg-purple-50 text-purple-700 border-purple-200';
+        case 'amber':
+          return 'bg-amber-50 text-amber-700 border-amber-200';
+        case 'emerald':
+          return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        default:
+          return 'bg-cyan-50 text-cyan-700 border-cyan-200';
+      }
+    } else {
+      switch (priorityColor) {
+        case 'rose':
+          return 'bg-rose-500/10 text-rose-300 border-rose-500/30';
+        case 'purple':
+          return 'bg-purple-500/10 text-purple-300 border-purple-500/30';
+        case 'amber':
+          return 'bg-amber-500/10 text-amber-300 border-amber-500/30';
+        case 'emerald':
+          return 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30';
+        default:
+          return 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30';
+      }
+    }
+  };
+
   const filteredRules = rulesData.filter((rule) => {
     const matchesCategory = activeCategory === 'all' || rule.category === activeCategory;
     const matchesSearch =
@@ -160,8 +194,14 @@ const LibraryRulesSection = () => {
       {/* Top Section Header */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[11px] font-mono font-bold text-cyan-300 mb-3">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+          <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono font-bold mb-3 ${
+            isLight
+              ? 'bg-cyan-50 border border-cyan-300 text-cyan-700'
+              : 'bg-cyan-500/10 border border-cyan-500/30 text-cyan-300'
+          }`}>
+            <span className={`w-2 h-2 rounded-full animate-pulse ${
+              isLight ? 'bg-cyan-600' : 'bg-cyan-400'
+            }`} />
             INSTITUTIONAL POLICY & GOVERNANCE HANDBOOK
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-100 tracking-tight">
@@ -180,7 +220,11 @@ const LibraryRulesSection = () => {
             placeholder="Search policy code or keyword (e.g. POL-01, fine, ID)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-900/90 border border-slate-800 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 transition-all font-mono"
+            className={`w-full rounded-2xl pl-10 pr-4 py-2.5 text-xs transition-all font-mono focus:outline-none ${
+              isLight
+                ? 'bg-white border border-slate-200 text-slate-800 placeholder-slate-400 focus:border-cyan-500 shadow-xs'
+                : 'bg-slate-900/90 border border-slate-800 text-slate-200 placeholder-slate-500 focus:border-cyan-500/50'
+            }`}
           />
         </div>
       </div>
@@ -207,17 +251,27 @@ const LibraryRulesSection = () => {
                   onClick={() => setActiveCategory(cat.id)}
                   className={`px-3.5 py-2.5 rounded-2xl text-xs font-semibold flex items-center justify-between gap-3 transition-all cursor-pointer whitespace-nowrap lg:whitespace-normal w-full ${
                     isActive
-                      ? 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 shadow-md font-bold'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent'
+                      ? isLight
+                        ? 'bg-cyan-50 text-cyan-800 border border-cyan-300 shadow-sm font-bold'
+                        : 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 shadow-md font-bold'
+                      : isLight
+                        ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-transparent'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-transparent'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
-                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-cyan-400' : 'text-slate-500'}`} />
+                    <Icon className={`w-4 h-4 shrink-0 ${
+                      isActive
+                        ? isLight ? 'text-cyan-700' : 'text-cyan-400'
+                        : isLight ? 'text-slate-400' : 'text-slate-500'
+                    }`} />
                     <span>{cat.label}</span>
                   </div>
                   <span
                     className={`text-[10px] font-mono px-2 py-0.5 rounded-full ${
-                      isActive ? 'bg-cyan-500/20 text-cyan-300' : 'bg-slate-800 text-slate-500'
+                      isActive
+                        ? isLight ? 'bg-cyan-100 text-cyan-800' : 'bg-cyan-500/20 text-cyan-300'
+                        : isLight ? 'bg-slate-100 text-slate-600' : 'bg-slate-800 text-slate-500'
                     }`}
                   >
                     {count}
@@ -228,8 +282,14 @@ const LibraryRulesSection = () => {
           </div>
 
           <div className="hidden lg:block pt-6 border-t border-slate-800/80 mt-6 space-y-3">
-            <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800/80 space-y-2">
-              <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold">
+            <div className={`p-4 rounded-2xl border space-y-2 ${
+              isLight
+                ? 'bg-slate-50/80 border-slate-200/80'
+                : 'bg-slate-900/60 border-slate-800/80'
+            }`}>
+              <div className={`flex items-center gap-2 text-xs font-bold ${
+                isLight ? 'text-cyan-700' : 'text-cyan-400'
+              }`}>
                 <FiLock className="w-3.5 h-3.5" /> Enforcement Level
               </div>
               <p className="text-[11px] text-slate-400 leading-relaxed">
@@ -242,10 +302,12 @@ const LibraryRulesSection = () => {
         {/* Right Column: Institutional Policy Registry Rows */}
         <div className="lg:col-span-3 space-y-4">
           {filteredRules.length === 0 ? (
-            <div className="p-10 rounded-3xl bg-slate-900/40 border border-slate-800 text-center space-y-3">
-              <FiSlash className="w-10 h-10 text-slate-600 mx-auto" />
-              <h4 className="text-sm font-bold text-slate-300">No Institutional Policy Matches Search</h4>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">
+            <div className={`p-10 rounded-3xl border text-center space-y-3 ${
+              isLight ? 'bg-white border-slate-200' : 'bg-slate-900/40 border-slate-800'
+            }`}>
+              <FiSlash className={`w-10 h-10 mx-auto ${isLight ? 'text-slate-400' : 'text-slate-600'}`} />
+              <h4 className={`text-sm font-bold ${isLight ? 'text-slate-800' : 'text-slate-300'}`}>No Institutional Policy Matches Search</h4>
+              <p className={`text-xs max-w-sm mx-auto ${isLight ? 'text-slate-500' : 'text-slate-500'}`}>
                 No policy records found matching your query. Try clearing search keywords or selecting another category domain.
               </p>
               <button
@@ -253,7 +315,9 @@ const LibraryRulesSection = () => {
                   setSearchQuery('');
                   setActiveCategory('all');
                 }}
-                className="mt-2 text-xs text-cyan-400 hover:underline font-semibold"
+                className={`mt-2 text-xs hover:underline font-semibold cursor-pointer ${
+                  isLight ? 'text-cyan-700' : 'text-cyan-400'
+                }`}
               >
                 Reset Directory Filters
               </button>
@@ -269,8 +333,12 @@ const LibraryRulesSection = () => {
                     key={rule.id}
                     className={`rounded-2xl border transition-all overflow-hidden ${
                       isExpanded
-                        ? 'bg-slate-900/90 border-cyan-500/40 shadow-lg shadow-cyan-950/20'
-                        : 'bg-slate-900/40 border-slate-800/80 hover:bg-slate-900/70 hover:border-slate-700'
+                        ? isLight
+                          ? 'bg-white border-cyan-400 shadow-md shadow-cyan-500/5'
+                          : 'bg-slate-900/90 border-cyan-500/40 shadow-lg shadow-cyan-950/20'
+                        : isLight
+                          ? 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-xs'
+                          : 'bg-slate-900/40 border-slate-800/80 hover:bg-slate-900/70 hover:border-slate-700'
                     }`}
                   >
                     {/* Policy Row Header */}
@@ -280,28 +348,24 @@ const LibraryRulesSection = () => {
                     >
                       <div className="flex items-start sm:items-center gap-4">
                         {/* Policy Code Badge */}
-                        <span className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 font-mono text-[11px] font-bold text-cyan-400 shrink-0">
+                        <span className={`px-2.5 py-1 rounded-lg border font-mono text-[11px] font-bold shrink-0 ${
+                          isLight
+                            ? 'bg-slate-100/90 border-slate-200 text-cyan-700'
+                            : 'bg-slate-950 border-slate-800 text-cyan-400'
+                        }`}>
                           {rule.id}
                         </span>
 
                         <div>
                           <div className="flex items-center gap-2.5 flex-wrap">
-                            <h3 className="text-sm sm:text-base font-bold text-slate-100 flex items-center gap-2">
-                              <Icon className="w-4 h-4 text-cyan-400 shrink-0" /> {rule.title}
+                            <h3 className="text-sm sm:base font-bold text-slate-100 flex items-center gap-2">
+                              <Icon className={`w-4 h-4 shrink-0 ${isLight ? 'text-cyan-600' : 'text-cyan-400'}`} /> {rule.title}
                             </h3>
 
                             <span
-                              className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md border ${
-                                rule.priorityColor === 'rose'
-                                  ? 'bg-rose-500/10 text-rose-300 border-rose-500/30'
-                                  : rule.priorityColor === 'purple'
-                                  ? 'bg-purple-500/10 text-purple-300 border-purple-500/30'
-                                  : rule.priorityColor === 'amber'
-                                  ? 'bg-amber-500/10 text-amber-300 border-amber-500/30'
-                                  : rule.priorityColor === 'emerald'
-                                  ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
-                                  : 'bg-cyan-500/10 text-cyan-300 border-cyan-500/30'
-                              }`}
+                              className={`text-[10px] font-mono font-bold uppercase px-2 py-0.5 rounded-md border ${getPriorityBadgeClasses(
+                                rule.priorityColor
+                              )}`}
                             >
                               {rule.priority}
                             </span>
@@ -312,13 +376,13 @@ const LibraryRulesSection = () => {
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
-                        <span className="text-xs font-semibold text-cyan-400">
+                        <span className={`text-xs font-semibold ${isLight ? 'text-cyan-700' : 'text-cyan-400'}`}>
                           {isExpanded ? 'Collapse' : 'Details'}
                         </span>
                         <FiChevronRight
-                          className={`w-4 h-4 text-cyan-400 transition-transform duration-200 ${
-                            isExpanded ? 'rotate-90' : ''
-                          }`}
+                          className={`w-4 h-4 transition-transform duration-200 ${
+                            isLight ? 'text-cyan-700' : 'text-cyan-400'
+                          } ${isExpanded ? 'rotate-90' : ''}`}
                         />
                       </div>
                     </div>
@@ -331,16 +395,29 @@ const LibraryRulesSection = () => {
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="border-t border-slate-800/80 bg-slate-950/60 p-4 sm:p-5"
+                          className={`border-t p-4 sm:p-5 transition-colors ${
+                            isLight
+                              ? 'border-slate-200/90 bg-slate-50/90'
+                              : 'border-slate-800/80 bg-slate-950/60'
+                          }`}
                         >
-                          <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 font-bold block mb-3">
-                            Enforcement Provisions & Compliance Terms
+                          <span className={`text-[10px] font-mono uppercase tracking-widest font-bold block mb-3 ${
+                            isLight ? 'text-slate-500' : 'text-slate-400'
+                          }`}>
+                            Enforcement Provisions &amp; Compliance Terms
                           </span>
 
                           <ul className="space-y-2.5">
                             {rule.details.map((point, pIdx) => (
-                              <li key={pIdx} className="flex items-start gap-2.5 text-xs text-slate-300">
-                                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shrink-0 mt-1.5" />
+                              <li
+                                key={pIdx}
+                                className={`flex items-start gap-2.5 text-xs ${
+                                  isLight ? 'text-slate-700' : 'text-slate-200'
+                                }`}
+                              >
+                                <span className={`w-1.5 h-1.5 rounded-full shrink-0 mt-1.5 ${
+                                  isLight ? 'bg-cyan-600' : 'bg-cyan-400'
+                                }`} />
                                 <span className="leading-relaxed">{point}</span>
                               </li>
                             ))}
@@ -353,21 +430,6 @@ const LibraryRulesSection = () => {
               })}
             </div>
           )}
-
-          {/* Bottom Official Governance Footer */}
-          <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900/90 to-slate-950 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
-                <FiCheckCircle className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-slate-200">Office of the Chief Librarian & Governance Board</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">
-                  Need clarification on special research access or desk holds? Contact <span className="text-cyan-400 font-mono">governance@library.edu</span>
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

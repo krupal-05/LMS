@@ -33,10 +33,14 @@ html.light .bg-\[\#0B0F17\] {
 }
 
 html.light .bg-slate-950,
-html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/95,
 html.light .bg-slate-950\/90,
-html.light .bg-slate-950\/95 {
+html.light .bg-slate-950\/80 {
   background-color: #FFFFFF !important;
+}
+
+html.light .bg-slate-950\/60 {
+  background-color: #F8FAFC !important;
 }
 
 html.light .bg-slate-900,
@@ -83,7 +87,8 @@ html.light .glass-card:hover {
 }
 
 /* Typography Hierarchy */
-html.light .text-slate-100 {
+html.light .text-slate-100,
+html.light .text-gray-100 {
   color: #0F172A !important; /* Deep charcoal heading */
 }
 
